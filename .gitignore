@@ -102,3 +102,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# directories
+log/
+.pytest_cache/
+generated/
+auto_examples/
+tikz-network.sty
+/tests/tikz-network.sty
+/examples/tikz-network.sty
+/tests/default_network.pdf
