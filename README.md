@@ -55,6 +55,8 @@ and looks like
 
 ![](https://hackl.github.io/network2tikz/example_01.png =400x)
 
+<img src="https://hackl.github.io/network2tikz/example_01.png" alt="example" width="400" height="400">
+
 Tweaking the plot is straightforward and can be done as part of your LaTeX workflow.
 [The tikz-network manual](https://github.com/hackl/tikz-network/blob/master/manual.pdf)
 contains multiple examples of how to make your plot look even better.
