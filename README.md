@@ -1,8 +1,13 @@
 # network2tikz
 
-This is `network2tikz`, a Python tool for converting network visualizations into [TikZ](https://www.ctan.org/pkg/pgf)([tikz-network](https://github.com/hackl/tikz-network)) figures, for native inclusion into your LaTeX documents.
+This is `network2tikz`, a Python tool for converting network
+visualizations into
+[TikZ](https://www.ctan.org/pkg/pgf)([tikz-network](https://github.com/hackl/tikz-network))
+figures, for native inclusion into your LaTeX documents.
 
-`network2tikz` works with Python 3 and supports (currently) the following Python network modules:
+
+`network2tikz` works with Python 3 and supports (currently) the
+following Python network modules:
 
 - [cnet](https://github.com/hackl/cnet)
 - [python-igraph](http://igraph.org/python/)
@@ -10,11 +15,22 @@ This is `network2tikz`, a Python tool for converting network visualizations into
 - [pathpy](https://github.com/IngoScholtes/pathpy)
 - default node/edge lists
 
-The output of `network2tikz` is in [tikz-network](https://github.com/hackl/tikz-network), a LaTeX library that sits on top of [TikZ](https://www.ctan.org/pkg/pgf), which allows to visualize and modify the network plot for your specific needs and publications.
+The output of `network2tikz` is
+in [tikz-network](https://github.com/hackl/tikz-network), a LaTeX
+library that sits on top of [TikZ](https://www.ctan.org/pkg/pgf),
+which allows to visualize and modify the network plot for your
+specific needs and publications.
 
-Because you are not only getting an image of your network, but also the LaTeX source file, you can easily post-process the figures (e.g. adding drawings, texts, equations,...).
 
-Because you are not only getting an image of your network, but also the LaTeX source file, you can easily post-process the figures (e.g. adding drawings, texts, equations,...).
+Because you are not only getting an image of your network, but also
+the LaTeX source file, you can easily post-process the figures
+(e.g. adding drawings, texts, equations,...).
+
+
+Because you are not only getting an image of your network, but also
+the LaTeX source file, you can easily post-process the figures
+(e.g. adding drawings, texts, equations,...).
+
 
 Since *a picture is worth a thousand words* a small example:
 
@@ -53,11 +69,10 @@ plot((nodes,edges),'network.tex',**style)
 ```
 and looks like
 
-![](https://hackl.github.io/network2tikz/example_01.png =400x)
+<img src="https://hackl.github.io/network2tikz/example_01.png" alt="example" width="350" height="350">
 
-<img src="https://hackl.github.io/network2tikz/example_01.png" alt="example" width="400" height="400">
-
-Tweaking the plot is straightforward and can be done as part of your LaTeX workflow.
+Tweaking the plot is straightforward and can be done as part of your
+LaTeX workflow.
 [The tikz-network manual](https://github.com/hackl/tikz-network/blob/master/manual.pdf)
 contains multiple examples of how to make your plot look even better.
 
@@ -71,25 +86,40 @@ to install/update.
 
 ## Usage
 
-1. Generate, manipulation, and study of the structure, dynamics, and functions of your complex networks as usual, with your preferred python module.
+1. Generate, manipulation, and study of the structure, dynamics, and
+   functions of your complex networks as usual, with your preferred
+   python module.
 
-2. Instead of the default plot functions (e.g. `igraph.plot()` or `networkx.draw()`) invoke `network2tikz` by
+2. Instead of the default plot functions (e.g. `igraph.plot()` or
+   `networkx.draw()`) invoke `network2tikz` by
    ```python
    plot(G,'mytikz.tex')
    ```
-   to store your network visualisation as the TikZ file `mytikz.tex`. Load the module with:
+   to store your network visualisation as the TikZ file
+   `mytikz.tex`. Load the module with:
    ```python
    from network2tikz import plot
    ```
    **Advanced usage**:
-   Of course, you always can improve your plot by manipulating the generated LaTeX file, but why not do it directly in Python? To do so, all visualization options available in [tikz-network](https://github.com/hackl/tikz-network) are also implemented in `network2tikz`. The appearance of the plot can be modified by keyword arguments (for a detailed explanation, please see below).
+   Of course, you always can improve your plot by manipulating the
+   generated LaTeX file, but why not do it directly in Python? To do
+   so, all visualization options available
+   in [tikz-network](https://github.com/hackl/tikz-network) are also
+   implemented in `network2tikz`. The appearance of the plot can be
+   modified by keyword arguments (for a detailed explanation, please
+   see below).
    ```python
    my_style = {}
    plot(G,'mytikz.tex',**my_style)
    ```
-    The arguments follow the options available in the [tikz-network](https://github.com/hackl/tikz-network) library and are also explained in the [tikz-network manual](https://github.com/hackl/tikz-network/blob/master/manual.pdf). 
+    The arguments follow the options available in
+   the [tikz-network](https://github.com/hackl/tikz-network) library
+   and are also explained in
+   the
+   [tikz-network manual](https://github.com/hackl/tikz-network/blob/master/manual.pdf).
 
-   Additionally, if you are more interested in the final output and not only the `.tex` file, used
+   Additionally, if you are more interested in the final output and
+   not only the `.tex` file, used
    ```python
    plot(G,'mypdf.pdf')
    ```
@@ -97,21 +127,44 @@ to install/update.
    ```python
    plot(G)
    ```
-   to create a temporal plot and directly show the result, i.e. similar to the matplotlib function `show()`. Finally, you can also create a node and edge list, which can be read and easily modified (in a post-processing step) with [tikz-network](https://github.com/hackl/tikz-network):
+   to create a temporal plot and directly show the result,
+   i.e. similar to the matplotlib function `show()`. Finally, you can
+   also create a node and edge list, which can be read and easily
+   modified (in a post-processing step)
+   with [tikz-network](https://github.com/hackl/tikz-network):
    ```python
    plot(G,'mycsv.csv')
    ```
-   <aside class="notice">
-   Currently, the direct compilation and the show functionality are only tested on a Linux OS. I'm certainly sure, that this will not work out-of-the-box for Windows OS, probably you have to define where your LaTeX compiler is stored (see below). As soon as I have access to a Windows computer I'll find a solution to make this work (a little bit) easier for you.
-   </aside>
-3. <aside class="notice">
-   In order to compile the plot, make sure you have installed [tikz-network](https://github.com/hackl/tikz-network)!
-   </aside>
-4. Compile the figure or add the contents of `mytikz.tex` into your LaTeX source code. With the option `standalone=false` only the TikZ figure will be saved, which can then be easily included in your LaTeX document via `\input{/path/to/mytikz.tex}`.
+    ```diff
+    - Currently, the direct compilation and the show functionality are
+    only tested on a Linux OS. I'm certainly sure, that this will not
+    work out-of-the-box for Windows OS, probably you have to define
+    where your LaTeX compiler is stored (see below). As soon as I have
+    access to a Windows computer I'll find a solution to make this work
+    (a little bit) easier for you.
+    ```
+
+3. Note:
+   ```diff
+   - In order to compile the plot, make sure you have
+     installed [tikz-network](https://github.com/hackl/tikz-network)!
+   ```
+
+4. Compile the figure or add the contents of `mytikz.tex` into your
+   LaTeX source code. With the option `standalone=false` only the TikZ
+   figure will be saved, which can then be easily included in your
+   LaTeX document via `\input{/path/to/mytikz.tex}`.
 
 ## Simple example
 
-For illustration purpose, a similar network as in the [python-igrap tutorial](http://igraph.org/python/doc/tutorial/tutorial.html) is used. If you are using another Python network module, and like to follow this example, please have a look at the [provided examples](https://github.com/hackl/network2tikz/tree/master/examples).
+For illustration purpose, a similar network as in
+the
+[python-igrap tutorial](http://igraph.org/python/doc/tutorial/tutorial.html) is
+used. If you are using another Python network module, and like to
+follow this example, please have a look at
+the
+[provided examples](https://github.com/hackl/network2tikz/tree/master/examples).
+
 
 Create network object and add some edges.
 
@@ -138,10 +191,14 @@ Already now the network can be plotted.
 ```python
 plot(net)
 ```
+<img src="https://hackl.github.io/network2tikz/plot_01.png" alt="example" width="350" height="350">
 
-![](https://hackl.github.io/network2tikz/plot_01.png =400x)
+Per default, the node positions are assigned uniform random. In order
+to create a layout, the layout methods of the network packages can be
+used. Or the position of the nodes can be directly assigned, in form
+of a dictionary, where the key is the node id and the value is a tuple
+of the node position in x and y.
 
-Per default, the node positions are assigned uniform random. In order to create a layout, the layout methods of the network packages can be used. Or the position of the nodes can be directly assigned, in form of a dictionary, where the key is the node id and the value is a tuple of the node position in x and y.
 
 ```python
 layout = {0: (4.3191, -3.5352), 1: (0.5292, -0.5292),
@@ -151,27 +208,38 @@ layout = {0: (4.3191, -3.5352), 1: (0.5292, -0.5292),
 plot(net,layout=layout)
 ```
 
-This should open an external pdf viewer showing a visual representation of the network, something like the one on the following figure:
+This should open an external pdf viewer showing a visual
+representation of the network, something like the one on the following
+figure:
 
-![](https://hackl.github.io/network2tikz/plot_02.png =400x)
+<img src="https://hackl.github.io/network2tikz/plot_02.png" alt="example" width="350" height="350">
 
-We can simply re-using the previous layout object here, but we also specified that we need a bigger plot (8 x 8 cm) and a larger margin around the graph to fit the self loop and potential labels (1 cm).
+We can simply re-using the previous layout object here, but we also
+specified that we need a bigger plot (8 x 8 cm) and a larger margin
+around the graph to fit the self loop and potential labels (1 cm).
 
-<aside class="notice">
-Per default, all size values are based on `cm`, and all line widths are defined in `pt` units. With the general option `units` this can be changed, see below.
-</aside>
+```diff
+- Per default, all size values are based on `cm`, and all line widths
+  are defined in `pt` units. With the general option `units` this can
+  be changed, see below.
+```
 
 ```python
 plot(net, layout=layout, canvas=(8,8), margin=1)
 ```
+<img src="https://hackl.github.io/network2tikz/plot_03.png" alt="example" width="350" height="350">
 
-![](https://hackl.github.io/network2tikz/plot_03.png =400x)
+```diff
+- Note, instead of the command `margins` the command `margin` can be
+  used. Also instead of `canvas`, `figure_size` or `bbox` can be
+  used. For more information see table below.
+```
 
-<aside class="notice">
-Note, instead of the command `margins` the command `margin` can be used. Also instead of `canvas`, `figure_size` or `bbox` can be used. For more information see table below.
-</aside>
-
-In to keep the properties of the visual representation of your network separate from the network itself. You can simply set up a Python dictionary containing the keyword arguments you would pass to `plot` and then use the double asterisk (`**`) operator to pass your specific styling attributes to `plot`:
+In to keep the properties of the visual representation of your network
+separate from the network itself. You can simply set up a Python
+dictionary containing the keyword arguments you would pass to `plot`
+and then use the double asterisk (`**`) operator to pass your specific
+styling attributes to `plot`:
 
 ```python
 color_dict = {'m': 'blue', 'f': 'red'}
@@ -204,9 +272,11 @@ visual_style['margin'] = 1
 plot(net,**visual_style)
 ```
 
-![](https://hackl.github.io/network2tikz/plot_04.png =400x)
+<img src="https://hackl.github.io/network2tikz/plot_04.png" alt="example" width="350" height="350">
 
-Beside showing the network, we can also generate the latex source file, which can be used and modified later on. This is done by adding the output file name with the ending `'.tex'`
+Beside showing the network, we can also generate the latex source
+file, which can be used and modified later on. This is done by adding
+the output file name with the ending `'.tex'`
 
 ```python
 plot(net,'network.tex',**visual_style)
@@ -237,7 +307,8 @@ plot(net,'network.tex',**visual_style)
 \end{tikzpicture}
 \end{document}
 ```
-Instead of the tex file, a node and edge list can be generates, which can also be used with the tikz-network library.
+Instead of the tex file, a node and edge list can be generates, which
+can also be used with the tikz-network library.
 
 ```python
 plot(net,'network.csv',**visual_style)
@@ -278,28 +349,32 @@ network2tikz.plot(network, filename=None, type=None, **kwds)
 ### Parameters
 
 - **network** : network object
-  Network to be drawn. The network can be a 'cnet', 'networkx', 'igraph',
-  'pathpy' object, or a tuple of a node list and edge list.
+
+    Network to be drawn. The network can be a 'cnet', 'networkx', 'igraph',
+    'pathpy' object, or a tuple of a node list and edge list.
 
 - **filename** : file, string or None, optional (default = None)
-  File or filename to save. The file ending specifies the
-  output. i.e. is the file ending with '.tex' a tex file will be
-  created; if the file ends with '.pdf' a pdf is created; if the file
-  ends with '.csv', two csv files are generated (filename_nodes.csv
-  and filename_edges.csv). If the filename is a tuple of strings, the
-  first entry will be used to name the node list and the second entry
-  for the edge list; and if no ending and no type is defined a
-  temporary pdf file is compiled and shown.
+
+    File or filename to save. The file ending specifies the
+    output. i.e. is the file ending with '.tex' a tex file will be
+    created; if the file ends with '.pdf' a pdf is created; if the file
+    ends with '.csv', two csv files are generated (filename_nodes.csv
+    and filename_edges.csv). If the filename is a tuple of strings, the
+    first entry will be used to name the node list and the second entry
+    for the edge list; and if no ending and no type is defined a
+    temporary pdf file is compiled and shown.
 
 - **type** : str or None, optional (default = None)
-  Type of the output file. If no ending is defined trough the filename,
-  the type of the output file can be specified by the type
-  option. Currently the following output types are supported:
-  'tex', 'pdf', 'csv' and 'dat'.
+
+    Type of the output file. If no ending is defined trough the filename,
+    the type of the output file can be specified by the type
+    option. Currently the following output types are supported:
+    'tex', 'pdf', 'csv' and 'dat'.
 
 - **kwds** : keyword arguments, optional (default= no attributes)
-  Attributes used to modify the appearance of the plot.
-  For details see below.
+
+    Attributes used to modify the appearance of the plot.
+    For details see below.
 
 ### Keyword arguments for node styles
 
@@ -494,7 +569,8 @@ used in the remaining code. This allows to keep the keywords used in
 
 ## TODO
 
-- [ ] Find Windows computer to test the pdf and show functionality of `network2tikz`, and probably fix the compiler location problem.
+- [ ] Find Windows computer to test the pdf and show functionality of
+  `network2tikz`, and probably fix the compiler location problem.
 
 - [ ] Add RGB functionality to the module!
 
