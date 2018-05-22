@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : drawing.py 
 # Creation  : 08 May 2018
-# Time-stamp: <Mon 2018-05-21 15:18 juergen>
+# Time-stamp: <Die 2018-05-22 15:03 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -116,7 +116,8 @@ class TikzNetworkDrawer(object):
         elif isinstance(network,tuple):
             log.debug('The network is of type "list".')
             self.nodes = network[0]
-            self.edges = {e:e for e in network[1]}
+            for e in network[1]:
+                self.edges[e] = e
         else:
             log.error('Type of the network could not be determined.'
                       ' Currently only "cnet", "networkx","igraph", "pathpy"'
@@ -328,7 +329,7 @@ class TikzNetworkDrawer(object):
         # check if value is string, list or dict
         _values = {}
         if isinstance(value,str) or isinstance(value,int) or \
-           isinstance(value,float):
+           isinstance(value,float) or isinstance(value,tuple):
             for n in self.nodes:
                 _values[n] = value
         elif isinstance(value,list):
@@ -353,7 +354,8 @@ class TikzNetworkDrawer(object):
         # check if value is string, list or dict
         _values = {}
         if isinstance(value,str) or isinstance(value,int) or \
-           isinstance(value,float) or isinstance(value,bool):
+           isinstance(value,float) or isinstance(value,bool) \
+           or isinstance(value,tuple):
             for n in self.edges:
                 _values[n] = value
         elif isinstance(value,list):
@@ -447,6 +449,9 @@ class TikzEdgeDrawer(object):
         self.tikz_kwds =  OrderedDict()
         self.tikz_kwds["edge_width"] = 'lw'
         self.tikz_kwds["edge_color"] = 'color'
+        self.tikz_kwds["edge_r"] = 'R'
+        self.tikz_kwds["edge_g"] = 'G'
+        self.tikz_kwds["edge_b"] = 'B'
         self.tikz_kwds["edge_opacity"] = 'opacity'
         self.tikz_kwds["edge_curved"] = 'bend'
         self.tikz_kwds["edge_label"] = 'label'
@@ -465,8 +470,29 @@ class TikzEdgeDrawer(object):
         self.tikz_args = OrderedDict()
         self.tikz_args['edge_directed'] = 'Direct'
         self.tikz_args['edge_math_mode'] = 'Math'
-        #self.tikz_args['edge_rgb'] = 'RGB'
+        self.tikz_args['edge_rgb'] = 'RGB'
         self.tikz_args['edge_not_in_bg'] = 'NotInBG'
+
+    def _check_color(self,mode='tex'):
+        """Check if RGB colors are used and return this option."""
+        _color = self.attributes.get('edge_color',None)
+        if isinstance(_color,tuple) and mode == 'tex':
+            self.attributes['edge_color'] = '{{{},{},{}}}'.format(_color[0],_color[1],_color[2])
+            self.attributes['edge_rgb'] = True
+        elif isinstance(_color,tuple) and mode =='csv' and \
+             self.attributes.get('edge_rgb',False):
+            self.attributes['edge_color'] = None
+            self.attributes['edge_r'] = _color[0]
+            self.attributes['edge_g'] = _color[1]
+            self.attributes['edge_b'] = _color[2]
+        elif not isinstance(_color,tuple) and mode =='csv' and \
+             self.attributes.get('edge_rgb',False):
+            self.attributes['edge_r'] = self.attributes.get('edge_r',0)
+            self.attributes['edge_g'] = self.attributes.get('edge_g',0)
+            self.attributes['edge_b'] = self.attributes.get('edge_b',0)
+        elif isinstance(_color,tuple) and mode =='csv' and \
+             self.attributes.get('edge_rgb',False) == False:
+            self.attributes['edge_color'] = None
 
     def _format_style(self):
         """Format the style attribute for the edge.
@@ -509,6 +535,8 @@ class TikzEdgeDrawer(object):
         """
         if mode == 'tex':
             self._format_style()
+            self._check_color()
+
             string = '\\Edge['
 
             for k in self.tikz_kwds:
@@ -524,12 +552,15 @@ class TikzEdgeDrawer(object):
             string += ']({})({})'.format(self.u,self.v)
 
         elif mode == 'csv':
+            self._check_color(mode='csv')
             string = '{},{}'.format(self.u,self.v)
 
             for k in self.tikz_kwds:
                 if k in self.attributes:
-                    string += ',{}'.format(self.attributes[k])
-
+                    if self.attributes[k] is not None:
+                        string += ',{}'.format(self.attributes[k])
+                    else:
+                        string +=', '
             for k in self.tikz_args:
                 if k in self.attributes:
                     if self.attributes[k] == True:
@@ -549,6 +580,7 @@ class TikzEdgeDrawer(object):
             string can be used as header for the 'csv' file.
 
         """
+        self._check_color(mode='csv')
         string = 'u,v'
         for k in self.tikz_kwds:
             if k in self.attributes:
@@ -600,6 +632,9 @@ class TikzNodeDrawer(object):
         self.tikz_kwds = OrderedDict()
         self.tikz_kwds['node_size'] = 'size'
         self.tikz_kwds['node_color'] = 'color'
+        self.tikz_kwds["node_r"] = 'R'
+        self.tikz_kwds["node_g"] = 'G'
+        self.tikz_kwds["node_b"] = 'B'
         self.tikz_kwds['node_opacity'] = 'opacity'
         self.tikz_kwds['node_label'] = 'label'
         self.tikz_kwds['node_label_position'] = 'position'
@@ -614,8 +649,29 @@ class TikzNodeDrawer(object):
         self.tikz_args['node_label_off'] = 'NoLabel'
         self.tikz_args['node_label_as_id'] = 'IdAsLabel'
         self.tikz_args['node_math_mode'] = 'Math'
-        #self.tikz_args['node_rgb'] = 'RGB'
+        self.tikz_args['node_rgb'] = 'RGB'
         self.tikz_args['node_pseudo'] = 'Pseudo'
+
+    def _check_color(self,mode='tex'):
+        """Check if RGB colors are used and return this option."""
+        _color = self.attributes.get('node_color',None)
+        if isinstance(_color,tuple) and mode == 'tex':
+            self.attributes['node_color'] = '{{{},{},{}}}'.format(_color[0],_color[1],_color[2])
+            self.attributes['node_rgb'] = True
+        elif isinstance(_color,tuple) and mode =='csv' and \
+             self.attributes.get('node_rgb',False):
+            self.attributes['node_color'] = None
+            self.attributes['node_r'] = _color[0]
+            self.attributes['node_g'] = _color[1]
+            self.attributes['node_b'] = _color[2]
+        elif not isinstance(_color,tuple) and mode =='csv' and \
+             self.attributes.get('node_rgb',False):
+            self.attributes['node_r'] = self.attributes.get('node_r',0)
+            self.attributes['node_g'] = self.attributes.get('node_g',0)
+            self.attributes['node_b'] = self.attributes.get('node_b',0)
+        elif isinstance(_color,tuple) and mode =='csv' and \
+             self.attributes.get('node_rgb',False) == False:
+            self.attributes['node_color'] = None
 
     def draw(self,mode='tex'):
         """Function to draw a virtual node.
@@ -635,6 +691,7 @@ class TikzNodeDrawer(object):
 
         """
         if mode == 'tex':
+            self._check_color()
             string = '\\Vertex[x={x:.{n}f},y={y:.{n}f}'\
                      ''.format(x=self.x,y=self.y,n=self.digits)
 
@@ -651,12 +708,16 @@ class TikzNodeDrawer(object):
             string += ']{{{}}}'.format(self.id)
 
         elif mode == 'csv':
+            self._check_color(mode='csv')
             string = '{id},{x:.{n}f},{y:.{n}f}'\
                      ''.format(id=self.id,x=self.x,y=self.y,n=self.digits)
 
             for k in self.tikz_kwds:
                 if k in self.attributes:
-                    string += ',{}'.format(self.attributes[k])
+                    if self.attributes[k] is not None:
+                        string += ',{}'.format(self.attributes[k])
+                    else:
+                        string +=', '
 
             for k in self.tikz_args:
                 if k in self.attributes:
@@ -677,6 +738,7 @@ class TikzNodeDrawer(object):
             string can be used as header for the 'csv' file.
 
         """
+        self._check_color(mode='csv')
         string = 'id,x,y'
         for k in self.tikz_kwds:
             if k in self.attributes:

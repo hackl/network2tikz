@@ -1,8 +1,16 @@
 # network2tikz
 
+| Module:  | network2tikz |
+|----------|--------------|
+| Date:    | 22 May 2018  |
+| Authors: | Jürgen Hackl |
+| Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
+| License: | GNU GPLv3    |
+| Version: | 0.1.0        |
+
 This is `network2tikz`, a Python tool for converting network
-visualizations into
-[TikZ](https://www.ctan.org/pkg/pgf)([tikz-network](https://github.com/hackl/tikz-network))
+visualizations into [TikZ](https://www.ctan.org/pkg/pgf)
+([tikz-network](https://github.com/hackl/tikz-network))
 figures, for native inclusion into your LaTeX documents.
 
 
@@ -135,8 +143,7 @@ to install/update.
    ```python
    plot(G,'mycsv.csv')
    ```
-   ---
-   *Note*
+   *Note:*
    > Currently, the direct compilation and the show functionality are
    > only tested on a Linux OS. I'm certainly sure, that this will not
    > work out-of-the-box for Windows OS, probably you have to define
@@ -144,8 +151,7 @@ to install/update.
    > access to a Windows computer I'll find a solution to make this work
    > (a little bit) easier for you.
    ---
-3. ---
-   *Note*
+3. *Note:*
    > In order to compile the plot, make sure you have
    >  installed [tikz-network](https://github.com/hackl/tikz-network)!
    ---
@@ -218,8 +224,7 @@ We can simply re-using the previous layout object here, but we also
 specified that we need a bigger plot (8 x 8 cm) and a larger margin
 around the graph to fit the self loop and potential labels (1 cm).
 
----
-*Note*
+*Note:*
 > Per default, all size values are based on `cm`, and all line widths
 >  are defined in `pt` units. With the general option `units` this can
 >  be changed, see below.
@@ -230,8 +235,7 @@ plot(net, layout=layout, canvas=(8,8), margin=1)
 ```
 <img src="https://hackl.github.io/network2tikz/plot_03.png" alt="example" width="350" height="350">
 
----
-*Note*
+*Note:*
 > Instead of the command `margins` the command `margin` can be
 > used. Also instead of `canvas`, `figure_size` or `bbox` can be
 > used. For more information see table below.
@@ -573,8 +577,5 @@ used in the remaining code. This allows to keep the keywords used in
 
 - [ ] Find Windows computer to test the pdf and show functionality of
   `network2tikz`, and probably fix the compiler location problem.
-
-- [ ] Add RGB functionality to the module!
-
 
 ## Changelog

@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_list.py 
 # Creation  : 21 May 2018
-# Time-stamp: <Mon 2018-05-21 15:38 juergen>
+# Time-stamp: <Die 2018-05-22 15:04 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -83,6 +83,7 @@ def test_plot(net,layout,color_dict):
     visual_style['edge_directed'] = True
     visual_style['edge_width'] = [1 + 2 * int(f) for f in is_formal]
     visual_style['edge_curved'] = 0.1
+    visual_style['edge_color'] = [(230,12,102),(26,213,56)]
     visual_style['canvas'] = (8,8)
     visual_style['margin'] = 1
 
@@ -152,13 +153,13 @@ def test_plot_all_options(net,layout,color_dict,shape_dict,style_dict):
     visual_style["canvas"] = (100,60)
     visual_style['keep_aspect_ratio'] = False
 
-    plot(net,'network.tex',**visual_style)
+    # plot(net,'network.tex',**visual_style)
 
-    plot(net,'network.csv',**visual_style)
+    # plot(net,'network.csv',**visual_style)
 
-    plot(net,'network.pdf',**visual_style)
+    # plot(net,'network.pdf',**visual_style)
 
-    plot(net,**visual_style)
+    # plot(net,**visual_style)
 # =============================================================================
 # eof
 #
