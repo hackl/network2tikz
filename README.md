@@ -6,7 +6,7 @@
 | Authors: | Jürgen Hackl |
 | Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
 | License: | GNU GPLv3    |
-| Version: | 0.1.0        |
+| Version: | 0.1.1        |
 
 This is `network2tikz`, a Python tool for converting network
 visualizations into [TikZ](https://www.ctan.org/pkg/pgf)
@@ -42,7 +42,7 @@ the LaTeX source file, you can easily post-process the figures
 
 Since *a picture is worth a thousand words* a small example:
 
-```python,test
+```python
 nodes = ['a','b','c','d']
 edges = [('a','b'), ('a','c'), ('c','d'),('d','b')]
 gender = ['f', 'm', 'f', 'm']
