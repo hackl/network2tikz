@@ -135,20 +135,20 @@ to install/update.
    ```python
    plot(G,'mycsv.csv')
    ```
-    ```diff
-    - Currently, the direct compilation and the show functionality are
-    only tested on a Linux OS. I'm certainly sure, that this will not
-    work out-of-the-box for Windows OS, probably you have to define
-    where your LaTeX compiler is stored (see below). As soon as I have
-    access to a Windows computer I'll find a solution to make this work
-    (a little bit) easier for you.
-    ```
-
-3. Note:
-   ```diff
-   - In order to compile the plot, make sure you have
-     installed [tikz-network](https://github.com/hackl/tikz-network)!
-   ```
+   ---
+   *Note*
+   > Currently, the direct compilation and the show functionality are
+   > only tested on a Linux OS. I'm certainly sure, that this will not
+   > work out-of-the-box for Windows OS, probably you have to define
+   > where your LaTeX compiler is stored (see below). As soon as I have
+   > access to a Windows computer I'll find a solution to make this work
+   > (a little bit) easier for you.
+   ---
+3. ---
+   *Note*
+   > In order to compile the plot, make sure you have
+   >  installed [tikz-network](https://github.com/hackl/tikz-network)!
+   ---
 
 4. Compile the figure or add the contents of `mytikz.tex` into your
    LaTeX source code. With the option `standalone=false` only the TikZ
@@ -218,22 +218,24 @@ We can simply re-using the previous layout object here, but we also
 specified that we need a bigger plot (8 x 8 cm) and a larger margin
 around the graph to fit the self loop and potential labels (1 cm).
 
-```diff
-- Per default, all size values are based on `cm`, and all line widths
-  are defined in `pt` units. With the general option `units` this can
-  be changed, see below.
-```
+---
+*Note*
+> Per default, all size values are based on `cm`, and all line widths
+>  are defined in `pt` units. With the general option `units` this can
+>  be changed, see below.
+---
 
 ```python
 plot(net, layout=layout, canvas=(8,8), margin=1)
 ```
 <img src="https://hackl.github.io/network2tikz/plot_03.png" alt="example" width="350" height="350">
 
-```diff
-- Note, instead of the command `margins` the command `margin` can be
-  used. Also instead of `canvas`, `figure_size` or `bbox` can be
-  used. For more information see table below.
-```
+---
+*Note*
+> Instead of the command `margins` the command `margin` can be
+> used. Also instead of `canvas`, `figure_size` or `bbox` can be
+> used. For more information see table below.
+---
 
 In to keep the properties of the visual representation of your network
 separate from the network itself. You can simply set up a Python
