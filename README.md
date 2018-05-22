@@ -165,7 +165,7 @@ to install/update.
 
 For illustration purpose, a similar network as in
 the
-[python-igrap tutorial](http://igraph.org/python/doc/tutorial/tutorial.html) is
+[python-igraph tutorial](http://igraph.org/python/doc/tutorial/tutorial.html) is
 used. If you are using another Python network module, and like to
 follow this example, please have a look at
 the
