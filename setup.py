@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : setup.py
 # Creation  : 21 May 2018
-# Time-stamp: <Die 2018-05-22 16:02 juergen>
+# Time-stamp: <Die 2018-05-22 16:12 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -43,7 +43,7 @@ setup(
     version=about['__version__'],
     packages=find_packages(),
     url='https://github.com/hackl/network2tikz',
-    download_url = 'https://github.com/hackl/network2tikz/archive/0.1.0.tar.gz',
+    download_url = 'https://github.com/hackl/network2tikz/archive/0.1.1.tar.gz',
     author=about['__author__'],
     author_email=about['__email__'],
     install_requires=['numpy'],
