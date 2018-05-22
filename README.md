@@ -53,7 +53,7 @@ plot((nodes,edges),'network.tex',**style)
 ```
 and looks like
 
-![](https://hackl.github.io/network2tikz/example_01.png)
+![](https://hackl.github.io/network2tikz/example_01.png =400x)
 
 Tweaking the plot is straightforward and can be done as part of your LaTeX workflow.
 [The tikz-network manual](https://github.com/hackl/tikz-network/blob/master/manual.pdf)
@@ -118,7 +118,7 @@ import igraph
 from network2tikz import plot
 
 net = igraph.Graph([(0,1), (0,2), (2,3), (3,4), (4,2), (2,5), (5,0), (6,3),
-                   (5,6), (6,6)],directed=True)
+                    (5,6), (6,6)],directed=True)
 ```
 
 Adding node and edge properties.
@@ -137,7 +137,7 @@ Already now the network can be plotted.
 plot(net)
 ```
 
-![](https://hackl.github.io/network2tikz/plot_01.png)
+![](https://hackl.github.io/network2tikz/plot_01.png =400x)
 
 Per default, the node positions are assigned uniform random. In order to create a layout, the layout methods of the network packages can be used. Or the position of the nodes can be directly assigned, in form of a dictionary, where the key is the node id and the value is a tuple of the node position in x and y.
 
@@ -151,7 +151,7 @@ plot(net,layout=layout)
 
 This should open an external pdf viewer showing a visual representation of the network, something like the one on the following figure:
 
-![](https://hackl.github.io/network2tikz/plot_02.png)
+![](https://hackl.github.io/network2tikz/plot_02.png =400x)
 
 We can simply re-using the previous layout object here, but we also specified that we need a bigger plot (8 x 8 cm) and a larger margin around the graph to fit the self loop and potential labels (1 cm).
 
@@ -163,7 +163,7 @@ Per default, all size values are based on `cm`, and all line widths are defined 
 plot(net, layout=layout, canvas=(8,8), margin=1)
 ```
 
-![](https://hackl.github.io/network2tikz/plot_03.png)
+![](https://hackl.github.io/network2tikz/plot_03.png =400x)
 
 <aside class="notice">
 Note, instead of the command `margins` the command `margin` can be used. Also instead of `canvas`, `figure_size` or `bbox` can be used. For more information see table below.
@@ -179,29 +179,30 @@ visual_style = {}
 Node options
 
 ```python
-visual_style['node_size'] = .5
-visual_style['node_color'] = [color_dict[g] for g in net.nodes('gender')]
-visual_style['node_opacity'] = .7
-visual_style['node_label'] = net.nodes['name']
-visual_style['node_label_position'] = 'below'
+visual_style['vertex_size'] = .5
+visual_style['vertex_color'] = [color_dict[g] for g in net.vs['gender']]
+visual_style['vertex_opacity'] = .7
+visual_style['vertex_label'] = net.vs['name']
+visual_style['vertex_label_position'] = 'below'
 ```
 
 Edge options
 
 ```python
-visual_style['edge_width'] = [1 + 2 * int(f) for f in net.edges('is_formal')]
+visual_style['edge_width'] = [1 + 2 * int(f) for f in net.es('is_formal')]
 visual_style['edge_curved'] = 0.1
 ```
 General options and plot command.
 
 ```python
-visual_style["canvas"] = (8,8)
-visual_style["margin"] = 1
+visual_style['layout'] = layout
+visual_style['canvas'] = (8,8)
+visual_style['margin'] = 1
 
 plot(net,**visual_style)
 ```
 
-![](https://hackl.github.io/network2tikz/plot_04.png)
+![](https://hackl.github.io/network2tikz/plot_04.png =400x)
 
 Beside showing the network, we can also generate the latex source file, which can be used and modified later on. This is done by adding the output file name with the ending `'.tex'`
 
@@ -209,30 +210,30 @@ Beside showing the network, we can also generate the latex source file, which ca
 plot(net,'network.tex',**visual_style)
 ```
 ```latex
-\\documentclass{standalone}
-\\usepackage{tikz-network}
-\\begin{document}
-\\begin{tikzpicture}
-\\clip (0,0) rectangle (8.0,8.0);
-\\Vertex[x=2.868,y=5.518,size=0.5,color=red,opacity=0.7,label=Alice,position=below]{a}
-\\Vertex[x=1.000,y=7.000,size=0.5,color=blue,opacity=0.7,label=Bob,position=below]{b}
-\\Vertex[x=5.006,y=5.387,size=0.5,color=red,opacity=0.7,label=Claire,position=below]{c}
-\\Vertex[x=6.858,y=3.552,size=0.5,color=blue,opacity=0.7,label=Dennis,position=below]{d}
-\\Vertex[x=7.000,y=6.419,size=0.5,color=red,opacity=0.7,label=Esther,position=below]{e}
-\\Vertex[x=3.698,y=2.808,size=0.5,color=blue,opacity=0.7,label=Frank,position=below]{f}
-\\Vertex[x=5.551,y=1.000,size=0.5,color=blue,opacity=0.7,label=George,position=below]{g}
-\\Edge[,lw=1.0,bend=-8.531,Direct](a)(b)
-\\Edge[,lw=1.0,bend=-8.531,Direct](a)(c)
-\\Edge[,lw=3.0,bend=-8.531,Direct](c)(d)
-\\Edge[,lw=3.0,bend=-8.531,Direct](d)(e)
-\\Edge[,lw=3.0,bend=-8.531,Direct](e)(c)
-\\Edge[,lw=1.0,bend=-8.531,Direct](c)(f)
-\\Edge[,lw=3.0,bend=-8.531,Direct](f)(a)
-\\Edge[,lw=1.0,bend=-8.531,Direct](f)(g)
-\\Edge[,lw=1.0,bend=-8.531,Direct](g)(g)
-\\Edge[,lw=1.0,bend=-8.531,Direct](g)(d)
-\\end{tikzpicture}
-\\end{document}
+\documentclass{standalone}
+\usepackage{tikz-network}
+\begin{document}
+\begin{tikzpicture}
+\clip (0,0) rectangle (8.0,8.0);
+\Vertex[x=2.868,y=5.518,size=0.5,color=red,opacity=0.7,label=Alice,position=below]{a}
+\Vertex[x=1.000,y=7.000,size=0.5,color=blue,opacity=0.7,label=Bob,position=below]{b}
+\Vertex[x=5.006,y=5.387,size=0.5,color=red,opacity=0.7,label=Claire,position=below]{c}
+\Vertex[x=6.858,y=3.552,size=0.5,color=blue,opacity=0.7,label=Dennis,position=below]{d}
+\Vertex[x=7.000,y=6.419,size=0.5,color=red,opacity=0.7,label=Esther,position=below]{e}
+\Vertex[x=3.698,y=2.808,size=0.5,color=blue,opacity=0.7,label=Frank,position=below]{f}
+\Vertex[x=5.551,y=1.000,size=0.5,color=blue,opacity=0.7,label=George,position=below]{g}
+\Edge[,lw=1.0,bend=-8.531,Direct](a)(b)
+\Edge[,lw=1.0,bend=-8.531,Direct](a)(c)
+\Edge[,lw=3.0,bend=-8.531,Direct](c)(d)
+\Edge[,lw=3.0,bend=-8.531,Direct](d)(e)
+\Edge[,lw=3.0,bend=-8.531,Direct](e)(c)
+\Edge[,lw=1.0,bend=-8.531,Direct](c)(f)
+\Edge[,lw=3.0,bend=-8.531,Direct](f)(a)
+\Edge[,lw=1.0,bend=-8.531,Direct](f)(g)
+\Edge[,lw=1.0,bend=-8.531,Direct](g)(g)
+\Edge[,lw=1.0,bend=-8.531,Direct](g)(d)
+\end{tikzpicture}
+\end{document}
 ```
 Instead of the tex file, a node and edge list can be generates, which can also be used with the tikz-network library.
 
@@ -266,18 +267,234 @@ g,g,1.0,-8.531,true
 g,d,1.0,-8.531,true
 ```
 
-Just for fun, the same plot generated above with the builtin plot function of `igraph`.
+## The plot function in detail
 
 ```python
-igraph.plot(net,'network.png',**visual_style)
+network2tikz.plot(network, filename=None, type=None, **kwds)
 ```
 
-![](https://hackl.github.io/network2tikz/plot_04.png)
+### Parameters
 
-## The plot function in detail
+- **network** : network object
+  Network to be drawn. The network can be a 'cnet', 'networkx', 'igraph',
+  'pathpy' object, or a tuple of a node list and edge list.
+
+- **filename** : file, string or None, optional (default = None)
+  File or filename to save. The file ending specifies the
+  output. i.e. is the file ending with '.tex' a tex file will be
+  created; if the file ends with '.pdf' a pdf is created; if the file
+  ends with '.csv', two csv files are generated (filename_nodes.csv
+  and filename_edges.csv). If the filename is a tuple of strings, the
+  first entry will be used to name the node list and the second entry
+  for the edge list; and if no ending and no type is defined a
+  temporary pdf file is compiled and shown.
+
+- **type** : str or None, optional (default = None)
+  Type of the output file. If no ending is defined trough the filename,
+  the type of the output file can be specified by the type
+  option. Currently the following output types are supported:
+  'tex', 'pdf', 'csv' and 'dat'.
+
+- **kwds** : keyword arguments, optional (default= no attributes)
+  Attributes used to modify the appearance of the plot.
+  For details see below.
+
+### Keyword arguments for node styles
+
+- ``node_size`` : size of the node. The default is 0.6 cm.
+
+- ``node_color`` : color of the nodes. The default is light blue. Colors can
+  be specified either by common color names, or by 3-tuples of floats
+  (ranging between 0 and 255 for the R, G and B components).
+
+- ``node_opacity`` : opacity of the nodes. The default is 1. The range of the
+  number lies between 0 and 1. Where 0 represents a fully transparent fill
+  and 1 a solid fill.
+
+- ``node_label`` : labels drawn next to the nodes.
+
+- ``node_label_position`` : Per default the position of the label is in the
+  center of the node. Classical Tikz commands can be used to change the
+  position of the label. Instead, using such command, the position can be
+  determined via an angle, by entering a number between -360 and 360. The
+  origin (0) is the y axis. A positive number change the position counter
+  clockwise, while a negative number make changes clockwise.
+
+- ``node_label_distance`` : distance between the node and the label.
+
+- ``node_label_color`` : color of the label.
+
+- ``node_label_size`` : font size of the label.
+
+- ``node_shape`` : shape of the vertices. Possibilities are:
+  'circle', 'rectangle',  'triangle', and any other Tikz shape
+
+- ``node_style`` : Any other Tikz style option or command can be entered via
+  the option style. Most of these commands can be found in the "TikZ and
+  PGF Manual". Contain the commands additional options (e.g. shading =
+  ball), then the argument for the style has to be between { } brackets.
+
+- ``node_layer`` : the node can be assigned to a specific layer.
+
+- ``node_label_off`` : is Boolean option which suppress all labels.
+
+- ``node_label_as_id`` : is a Boolean option which assigns the node id as label.
+
+- ``node_math_mode`` : is a Boolean option which transforms the labels into
+  mathematical expressions without using the $ $ environment.
+
+- ``node_pseudo`` : is a Boolean option which creates a pseudo node, where only
+  the node name and the node coordinate will be provided.
+
+### Keyword arguments for edge styles
+
+- ``edge_width`` : width of the edges. The default unit is point (pt).
+
+- ``edge_color`` : color of the edges. The default is gray. Colors can
+  be specified either by common color names, or by 3-tuples of floats
+  (ranging between 0 and 255 for the R, G and B components).
+
+- ``edge_opacity`` : opacity of the edges. The default is 1. The range of the
+  number lies between 0 and 1. Where 0 represents a fully transparent fill
+  and 1 a solid fill.
+
+- ``edge_curved`` : whether the edges should be curved. Positive numbers
+  correspond to edges curved in a counter-clockwise direction, negative
+  numbers correspond to edges curved in a clockwise direction. Zero
+  represents straight edges.
+
+- ``edge_label`` : labels drawn next to the edges.
+
+- ``edge_label_position`` : Per default the label is positioned in between
+  both nodes in the center of the line. Classical Tikz commands can be used to
+  change the position of the label.
+
+- ``edge_label_distance`` : The label position between the nodes can be
+  modified with the distance option. Per default the label is centered
+  between both nodes. The position is expressed as the percentage of the
+  length between the nodes, e.g. of distance = 0.7, the label is placed at
+  70% of the edge length away of Vertex i.
+
+- ``edge_label_color`` : color of the label.
+
+- ``edge_label_size`` : font size of the label.
+
+- ``edge_style`` : Any other Tikz style option or command can be entered via
+  the option style. Most of these commands can be found in the "TikZ and
+  PGF Manual". Contain the commands additional options (e.g. shading =
+  ball), then the argument for the style has to be between { } brackets.
+
+- ``edge_arrow_size`` : arrow size of the edges.
+
+- ``edge_arrow_width`` : width of the arrowhead on the edge.
+
+- ``edge_loop_size`` :  modifies the length of the edge. The measure value has
+  to be insert together with its units. Per default the loop size is 1 cm.
+
+- ``edge_loop_position`` : The position of the self-loop is defined via the
+  rotation angle around the node. The origin (0) is the y axis. A positive
+  number change the loop position counter clockwise, while a negative
+  number make changes clockwise.
+
+- ``edge_loop_shape`` : The shape of the self-loop is defined by the enclosing
+  angle. The shape can be changed by decreasing or increasing the argument
+  value of the loop shape option.
+
+- ``edge_directed`` : is a Boolean option which transform edges to directed
+  arrows. If the network is already defined as directed network this option
+  is not needed, except to turn off the direction for one or more edges.
+
+- ``edge_math_mode`` : is a Boolean option which transforms the labels into
+  mathematical expressions without using the $ $ environment.
+
+- ``edge_not_in_bg`` : Per default, the edge is drawn on the background layer
+  of the tikz picture. I.e. objects which are created after the edges
+  appear also on top of them. To turn this off, the option edge_not_in_bg
+  has to be enabled.
+
+### Keyword arguments for general options
+
+- ``units`` : string or tuple of strings, optional (default = ('cm','pt'))
+  Per default, all size values are based on cm, and all line widths are
+  defined in pt units. Whit this option the input units can be
+  changed. Currently supported are: Pixel 'px', Points 'pt',
+  Millimeters 'mm', and Centimeters 'cm'. If a single value is entered as
+  unit all inputs have to be defined using this unit. If a tuple of units
+  is given, the sizes are defined with the first entry the line widths with
+  the second entry.
+
+- ``layout`` : dict
+  A dictionary with the node positions on a 2-dimensional plane. The
+  key value of the dict represents the node id while the value
+  represents a tuple of coordinates (e.g. n = (x,y)). The initial
+  layout can be placed anywhere on the 2-dimensional plane.
+
+- ``margins`` : None, int, float or dict, optional (default = None)
+  The margins define the 'empty' space from the canvas border. If no
+  margins are defined, the margin will be calculated based on the maximum
+  node size, to avoid clipping of the nodes. If a single int or float is
+  defined all margins using this distances. To define different the margin
+  sizes for all size a dictionary with in the form of
+  `{'top':2,'left':1,'bottom':2,'right':.5}` has to be used.
+
+- ``canvas`` : None, tuple of int or floats, optional (default = (6,6))
+  Canvas or figure_size defines the size of the plot. The values entered as
+  a tuple of numbers where the first number is width of the figure and the
+  second number is the height of the figure. If the option ``units`` is not
+  used the size is specified in cm. Per default the canvas is 6cm x 6cm. 
+
+- ``keep_aspect_ratio`` : bool, optional (default = True)
+  Defines whether to keep the aspect ratio of the current layout. If
+  ``False``, the layout will be rescaled to fit exactly into the
+  available area in the canvas (i.e. removed margins). If ``True``, the
+  original aspect ratio of the layout will be kept and it will be
+  centered within the canvas.
+
+- ``standalone`` : bool, optional (default = True)
+  If this option is true, a standalone latex file will be created. i.e. the
+  figure can be compiled from this output file. If standalone is false,
+  only the tikz environment is stored in the tex file, and can be imported
+  in an existing tex file.
+
+- ``clean`` : bool, optional (default = True)
+  Whether non-pdf files created that are created during compilation should
+  be removed.
+
+- ``clean_tex`` : bool, optional (default = True)
+  Also remove the generated tex file.
+
+- ``compiler`` : `str` or `None`, optional (default = None)
+  The name of the LaTeX compiler to use. If it is None, cnet will choose a
+  fitting one on its own. Starting with ``latexmk`` and then ``pdflatex``.
+
+- ``compiler_args`` : `list` or `None`, optional (default = None)
+  Extra arguments that should be passed to the LaTeX compiler. If this is
+  None it defaults to an empty list.
+
+- ``silent`` : bool, optional (default = True)
+  Whether to hide compiler output or not.
+
+### Keyword naming convention
+
+In the style dictionary multiple keywords can be used to address
+attributes. These keywords will be converted to an unique key word,
+used in the remaining code. This allows to keep the keywords used in
+`igraph`.
+
+
+| keys    | other valid keys  |
+|---------|-------------------|
+| node    | vertex, v, n      |
+| edge    | link, l, e        |
+| margins | margin            |
+| canvas  | bbox, figure_size |
+| units   | unit              |
 
 ## TODO
 
 - [ ] Find Windows computer to test the pdf and show functionality of `network2tikz`, and probably fix the compiler location problem.
+
+- [ ] Add RGB functionality to the module!
+
 
 ## Changelog
