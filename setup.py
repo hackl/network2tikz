@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : setup.py
 # Creation  : 21 May 2018
-# Time-stamp: <Die 2018-05-22 15:22 juergen>
+# Time-stamp: <Die 2018-05-22 16:02 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -49,6 +49,7 @@ setup(
     install_requires=['numpy'],
     description='A converter that takes a network (cnet, igraph, networkx, pathpy, ...) and creates a tikz-network for smooth integration into LaTeX.',
     long_description = readme,
+    long_description_content_type='text/markdown',
     license = about['__license__'],
     classifiers=[
         about['__status__'],
