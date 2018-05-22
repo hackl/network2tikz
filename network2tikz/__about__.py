@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : __about__.py
 # Creation  : 21 May 2018
-# Time-stamp: <Mon 2018-05-21 17:08 juergen>
+# Time-stamp: <Die 2018-05-22 15:52 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -30,7 +30,7 @@ __version__ = '0.1.0'
 __author__ = u'Juergen Hackl'
 __email__ = 'hackl.j@gmx.at'
 __copyright__ = u'Copyright (c) 2018, {} <{}>'.format(__author__, __email__)
-__license__ = u'GNU General Public License 3'
+__license__ = u'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
 __maintainer__ = u'Juergen Hackl'
 __status__ = 'Development Status :: 4 - Beta'
 __credits__ = []
