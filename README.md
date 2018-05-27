@@ -29,16 +29,9 @@ library that sits on top of [TikZ](https://www.ctan.org/pkg/pgf),
 which allows to visualize and modify the network plot for your
 specific needs and publications.
 
-
 Because you are not only getting an image of your network, but also
 the LaTeX source file, you can easily post-process the figures
 (e.g. adding drawings, texts, equations,...).
-
-
-Because you are not only getting an image of your network, but also
-the LaTeX source file, you can easily post-process the figures
-(e.g. adding drawings, texts, equations,...).
-
 
 Since *a picture is worth a thousand words* a small example:
 

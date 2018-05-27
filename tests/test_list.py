@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_list.py 
 # Creation  : 21 May 2018
-# Time-stamp: <Die 2018-05-22 15:04 juergen>
+# Time-stamp: <Son 2018-05-27 11:49 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
