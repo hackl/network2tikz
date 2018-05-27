@@ -2,11 +2,11 @@
 
 | Module:  | network2tikz |
 |----------|--------------|
-| Date:    | 22 May 2018  |
+| Date:    | 27 May 2018  |
 | Authors: | Jürgen Hackl |
 | Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
 | License: | GNU GPLv3    |
-| Version: | 0.1.1        |
+| Version: | 0.1.2        |
 
 This is `network2tikz`, a Python tool for converting network
 visualizations into [TikZ](https://www.ctan.org/pkg/pgf)
@@ -143,14 +143,6 @@ to install/update.
    ```python
    plot(G,'mycsv.csv')
    ```
-   *Note:*
-   > Currently, the direct compilation and the show functionality are
-   > only tested on a Linux OS. I'm certainly sure, that this will not
-   > work out-of-the-box for Windows OS, probably you have to define
-   > where your LaTeX compiler is stored (see below). As soon as I have
-   > access to a Windows computer I'll find a solution to make this work
-   > (a little bit) easier for you.
-   ---
 3. *Note:*
    > In order to compile the plot, make sure you have
    >  installed [tikz-network](https://github.com/hackl/tikz-network)!
@@ -575,7 +567,12 @@ used in the remaining code. This allows to keep the keywords used in
 
 ## TODO
 
-- [ ] Find Windows computer to test the pdf and show functionality of
-  `network2tikz`, and probably fix the compiler location problem.
+- [ ] Add multi-layer handler
+- [ ] Add layout generating functions
 
 ## Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| 0.1.0   | 2018-05-21 | initial commit to github |
+| 0.1.1   | 2018-05-22 | initial commit to PyPI   |
+| 0.1.2   | 2018-05-27 | fixed Windows compiling problem |

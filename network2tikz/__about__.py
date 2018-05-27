@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : __about__.py
 # Creation  : 21 May 2018
-# Time-stamp: <Die 2018-05-22 16:11 juergen>
+# Time-stamp: <Son 2018-05-27 09:45 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -26,7 +26,7 @@
 # =============================================================================
 
 __title__ = 'Network to TikZ'
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __author__ = u'Juergen Hackl'
 __email__ = 'hackl.j@gmx.at'
 __copyright__ = u'Copyright (c) 2018, {} <{}>'.format(__author__, __email__)

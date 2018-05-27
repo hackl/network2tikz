@@ -112,3 +112,6 @@ tikz-network.sty
 /tests/tikz-network.sty
 /examples/tikz-network.sty
 /tests/default_network.pdf
+/tests/network.pdf
+/tests/network_edges.csv
+/tests/network_nodes.csv

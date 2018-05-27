@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : plot.py 
 # Creation  : 08 May 2018
-# Time-stamp: <Mon 2018-05-21 15:17 juergen>
+# Time-stamp: <Son 2018-05-27 09:43 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -684,26 +684,15 @@ class Plot(object):
 
         main_arguments = ['--interaction=nonstopmode', basename + '.tex']
 
-        os_error = None
-
         for compiler, arguments in compilers:
             command = [compiler] + arguments + compiler_args + main_arguments
 
             try:
                 output = subprocess.check_output(command,
                                                  stderr=subprocess.STDOUT)
-            except (OSError, IOError) as e:
-                # Use FileNotFoundError when python 2 is dropped
-                os_error = e
-
-                if os_error.errno == errno.ENOENT:
-                    # If compiler does not exist, try next in the list
-                    continue
-                raise
-            except subprocess.CalledProcessError as e:
-                # For all other errors print the output and raise the error
-                print(e.output.decode())
-                raise
+            except:
+                # If compiler does not exist, try next in the list
+                continue
             else:
                 if not silent:
                     print(output.decode())

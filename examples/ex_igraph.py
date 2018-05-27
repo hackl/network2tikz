@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : ex_igraph.py 
 # Creation  : 21 May 2018
-# Time-stamp: <Mon 2018-05-21 16:35 juergen>
+# Time-stamp: <Son 2018-05-27 09:46 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -28,7 +28,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import igraph as ig
 from network2tikz import plot
