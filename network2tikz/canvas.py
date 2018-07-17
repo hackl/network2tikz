@@ -1,13 +1,13 @@
 #!/usr/bin/python -tt
 # -*- coding: utf-8 -*-
 # =============================================================================
-# File      : canvas.py 
+# File      : canvas.py
 # Creation  : 19 May 2018
-# Time-stamp: <Mon 2018-05-21 15:18 juergen>
+# Time-stamp: <Die 2018-07-17 12:59 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
-# $Id$ 
+# $Id$
 #
 # Description : Module to create a canvas for plotting
 #
@@ -22,7 +22,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # =============================================================================
 from . import logger
 from .exceptions import CnetError
@@ -30,7 +30,8 @@ from .exceptions import CnetError
 log = logger(__name__)
 
 # TODO: move to config file
-CANVAS = (6,6)
+CANVAS = (6, 6)
+
 
 class Canvas(object):
     """A canvas object defining the size of the plot.
@@ -70,7 +71,8 @@ class Canvas(object):
         Height of the figure. This property can be called, set and modified.
 
     """
-    def __init__(self,width=None,height=None,margins=None,node_sizes=None):
+
+    def __init__(self, width=None, height=None, margins=None, node_sizes=None):
         """Initialize a canvas object.
 
         Parameters
@@ -118,7 +120,7 @@ class Canvas(object):
         return self._width
 
     @width.setter
-    def width(self,width):
+    def width(self, width):
         """Set the width of the canvas."""
         self._width = width
 
@@ -128,11 +130,11 @@ class Canvas(object):
         return self._height
 
     @height.setter
-    def height(self,height):
+    def height(self, height):
         """Set the height of the canvas."""
         self._height = height
 
-    def margins(self,margins=None,node_sizes=None):
+    def margins(self, margins=None, node_sizes=None):
         """Returns a dictionary of margins.
 
         Parameters
@@ -195,20 +197,20 @@ class Canvas(object):
                 _margin = max(node_sizes.values())/2+.05
             else:
                 _margin = 0.35
-            _margins = {'top':_margin, 'bottom':_margin,
-                        'left':_margin, 'right':_margin}
+            _margins = {'top': _margin, 'bottom': _margin,
+                        'left': _margin, 'right': _margin}
 
         # if only one number is specified, this will be applied to all margins.
-        elif isinstance(margins,int) or isinstance(margins,float):
+        elif isinstance(margins, int) or isinstance(margins, float):
             _m = margins
-            _margins = {'top':_m, 'left':_m, 'bottom':_m,'right':_m}
+            _margins = {'top': _m, 'left': _m, 'bottom': _m, 'right': _m}
 
         # if margins defined as dict, the dict values are used
-        elif isinstance(margins,dict):
-            _margins = {'top':margins.get('top',0),
-                        'left':margins.get('left',0),
-                        'bottom':margins.get('bottom',0),
-                        'right':margins.get('right',0)}
+        elif isinstance(margins, dict):
+            _margins = {'top': margins.get('top', 0),
+                        'left': margins.get('left', 0),
+                        'bottom': margins.get('bottom', 0),
+                        'right': margins.get('right', 0)}
         else:
             log.error('Margins are not proper defined!')
             raise CnetError
@@ -278,53 +280,63 @@ class Canvas(object):
         margins = self.margins()
 
         # find min and max values of the points
-        min_x = min(layout.items(),key = lambda item: item[1][0])[1][0]
-        max_x = max(layout.items(),key = lambda item: item[1][0])[1][0]
-        min_y = min(layout.items(),key = lambda item: item[1][1])[1][1]
-        max_y = max(layout.items(),key = lambda item: item[1][1])[1][1]
+        min_x = min(layout.items(), key=lambda item: item[1][0])[1][0]
+        max_x = max(layout.items(), key=lambda item: item[1][0])[1][0]
+        min_y = min(layout.items(), key=lambda item: item[1][1])[1][1]
+        max_y = max(layout.items(), key=lambda item: item[1][1])[1][1]
 
         # calculate the scaling ratio
-        ratio_x = (width-margins['left']-margins['right']) / (max_x-min_x)
-        ratio_y = (height-margins['top']-margins['bottom']) / (max_y-min_y)
+        ratio_x = float('inf')
+        ratio_y = float('inf')
+
+        if max_x-min_x > 0:
+            ratio_x = (width-margins['left']-margins['right']) / (max_x-min_x)
+        if max_y-min_y > 0:
+            ratio_y = (height-margins['top']-margins['bottom']) / (max_y-min_y)
 
         if keep_aspect_ratio:
-            scaling = (min(ratio_x,ratio_y),min(ratio_x,ratio_y))
+            scaling = (min(ratio_x, ratio_y), min(ratio_x, ratio_y))
         else:
-            scaling = (ratio_x,ratio_y)
+            scaling = (ratio_x, ratio_y)
+
+        if scaling[0] == float('inf'):
+            scaling = (1, scaling[1])
+        if scaling[1] == float('inf'):
+            scaling = (scaling[0], 1)
 
         # apply scaling to the points
         _layout = {}
-        for n,(x,y) in layout.items():
+        for n, (x, y) in layout.items():
             _x = (x)*scaling[0]
             _y = (y)*scaling[1]
-            _layout[n] = (_x,_y)
+            _layout[n] = (_x, _y)
 
         # find min and max values of new the points
-        min_x = min(_layout.items(),key = lambda item: item[1][0])[1][0]
-        max_x = max(_layout.items(),key = lambda item: item[1][0])[1][0]
-        min_y = min(_layout.items(),key = lambda item: item[1][1])[1][1]
-        max_y = max(_layout.items(),key = lambda item: item[1][1])[1][1]
+        min_x = min(_layout.items(), key=lambda item: item[1][0])[1][0]
+        max_x = max(_layout.items(), key=lambda item: item[1][0])[1][0]
+        min_y = min(_layout.items(), key=lambda item: item[1][1])[1][1]
+        max_y = max(_layout.items(), key=lambda item: item[1][1])[1][1]
 
         # calculate the translation
-        translation = (((width-margins['left']-margins['right'])/2 \
-                        +margins['left']) - ((max_x-min_x)/2 + min_x),
-                       ((height-margins['top']-margins['bottom'])/2 \
-                        + margins['bottom'])- ((max_y-min_y)/2 + min_y))
+        translation = (((width-margins['left']-margins['right'])/2
+                        + margins['left']) - ((max_x-min_x)/2 + min_x),
+                       ((height-margins['top']-margins['bottom'])/2
+                        + margins['bottom']) - ((max_y-min_y)/2 + min_y))
 
         # apply translation to the points
-        for n,(x,y) in _layout.items():
+        for n, (x, y) in _layout.items():
             _x = (x)+translation[0]
             _y = (y)+translation[1]
-            _layout[n] = (_x,_y)
+            _layout[n] = (_x, _y)
 
         return _layout
 
 # =============================================================================
 # eof
 #
-# Local Variables: 
+# Local Variables:
 # mode: python
 # mode: linum
 # mode: auto-fill
 # fill-column: 80
-# End:  
+# End:

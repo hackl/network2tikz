@@ -2,11 +2,11 @@
 
 | Module:  | network2tikz |
 |----------|--------------|
-| Date:    | 27 May 2018  |
+| Date:    | 17 July 2018  |
 | Authors: | Jürgen Hackl |
 | Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
 | License: | GNU GPLv3    |
-| Version: | 0.1.2        |
+| Version: | 0.1.3        |
 
 This is `network2tikz`, a Python tool for converting network
 visualizations into [TikZ](https://www.ctan.org/pkg/pgf)
@@ -569,3 +569,4 @@ used in the remaining code. This allows to keep the keywords used in
 | 0.1.0   | 2018-05-21 | initial commit to github |
 | 0.1.1   | 2018-05-22 | initial commit to PyPI   |
 | 0.1.2   | 2018-05-27 | fixed Windows compiling problem |
+| 0.1.3   | 2018-07-17 | fixed layout problem when coordinates are zero |
