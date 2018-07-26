@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_layout.py
 # Creation  : 17 July 2018
-# Time-stamp: <Die 2018-07-17 13:01 juergen>
+# Time-stamp: <Don 2018-07-26 16:39 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -60,7 +60,7 @@ def test_layout(net):
     plot(net, **visual_style)
 
 
-test_layout(net())
+# test_layout(net())
 
 # =============================================================================
 # eof

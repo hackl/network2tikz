@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : canvas.py
 # Creation  : 19 May 2018
-# Time-stamp: <Die 2018-07-17 12:59 juergen>
+# Time-stamp: <Don 2018-07-26 16:36 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -26,7 +26,6 @@
 # =============================================================================
 from . import logger
 from .exceptions import CnetError
-
 log = logger(__name__)
 
 # TODO: move to config file

@@ -1,13 +1,13 @@
 #!/usr/bin/python -tt
 # -*- coding: utf-8 -*-
 # =============================================================================
-# File      : unit.py 
+# File      : unit.py
 # Creation  : 08 May 2018
-# Time-stamp: <Mon 2018-05-21 15:20 juergen>
+# Time-stamp: <Don 2018-07-26 16:37 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
-# $Id$ 
+# $Id$
 #
 # Description : Module to convert measurement units
 #
@@ -22,13 +22,13 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # =============================================================================
 
 from . import logger
 from .exceptions import CnetNotImplemented, CnetError
-
 log = logger(__name__)
+
 
 class UnitConverter(object):
     """Convert units.
@@ -56,7 +56,8 @@ class UnitConverter(object):
     1
 
     """
-    def __init__(self, input_unit='cm',output_unit='cm',digits=4):
+
+    def __init__(self, input_unit='cm', output_unit='cm', digits=4):
         """Initialize the unit converter.
 
         Parameters
@@ -79,7 +80,7 @@ class UnitConverter(object):
         self.output_unit = output_unit
         self.digits = digits
 
-    def __call__(self,value):
+    def __call__(self, value):
         """Returns the converted measure.
 
         Returns
@@ -121,7 +122,7 @@ class UnitConverter(object):
         """Convert millimeters to points."""
         return measure * 2.83465
 
-    def convert(self,value):
+    def convert(self, value):
         """Returns the converted measure.
 
         Returns
@@ -177,14 +178,14 @@ class UnitConverter(object):
             raise CnetNotImplemented
 
         # return the converted measure
-        return round(value,self.digits)
+        return round(value, self.digits)
 
 # =============================================================================
 # eof
 #
-# Local Variables: 
+# Local Variables:
 # mode: python
 # mode: linum
 # mode: auto-fill
 # fill-column: 80
-# End:  
+# End:

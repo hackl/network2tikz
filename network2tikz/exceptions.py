@@ -1,13 +1,13 @@
 #!/usr/bin/python -tt
 # -*- coding: utf-8 -*-
 # =============================================================================
-# File      : exceptions.py 
+# File      : exceptions.py
 # Creation  : 30 Apr 2018
-# Time-stamp: <Fre 2018-05-04 10:14 juergen>
+# Time-stamp: <Don 2018-07-26 16:37 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
-# $Id$ 
+# $Id$
 #
 # Description : Module with the base exceptions
 #
@@ -22,27 +22,28 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # =============================================================================
 
 
 class CnetException(Exception):
     """Base class for all cnet specific exceptions."""
 
+
 class CnetError(CnetException):
     """Exception for a serious error in cnet"""
+
 
 class CnetNotImplemented(CnetException):
     """Exception for procedure not implemented in cnet."""
 
 
-    
 # =============================================================================
 # eof
 #
-# Local Variables: 
+# Local Variables:
 # mode: python
 # mode: linum
 # mode: auto-fill
 # fill-column: 80
-# End:  
+# End:

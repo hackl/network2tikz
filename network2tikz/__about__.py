@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : __about__.py
 # Creation  : 21 May 2018
-# Time-stamp: <Die 2018-07-17 13:15 juergen>
+# Time-stamp: <Don 2018-07-26 16:37 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch

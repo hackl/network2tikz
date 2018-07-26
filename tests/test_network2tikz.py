@@ -1,13 +1,13 @@
 #!/usr/bin/python -tt
 # -*- coding: utf-8 -*-
 # =============================================================================
-# File      : test_network2tikz.py 
+# File      : test_network2tikz.py
 # Creation  : 21 May 2018
-# Time-stamp: <Mon 2018-05-21 15:50 juergen>
+# Time-stamp: <Don 2018-07-26 16:39 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
-# $Id$ 
+# $Id$
 #
 # Description : Test functions for converting networks to tikz-networks
 #
@@ -22,17 +22,19 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # =============================================================================
 
 import pytest
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')))
 #from cnet import Node, Edge, Network
 from network2tikz.canvas import Canvas
 from network2tikz.units import UnitConverter
+
 
 def test_canvas():
     canvas = Canvas()
@@ -46,56 +48,57 @@ def test_canvas():
     assert canvas.width == 10
     assert canvas.height == 8
 
-    canvas = Canvas(4,3)
+    canvas = Canvas(4, 3)
 
     assert canvas.width == 4
     assert canvas.height == 3
 
     canvas = Canvas()
 
-    assert isinstance(canvas.margins(),dict)
+    assert isinstance(canvas.margins(), dict)
     assert canvas.margins()['top'] == 0.35
 
     assert canvas.margins(1)['top'] == 1
 
-    margins = canvas.margins({'top':2,'left':1,'bottom':2,'right':.5})
+    margins = canvas.margins({'top': 2, 'left': 1, 'bottom': 2, 'right': .5})
     assert margins['top'] == 2 and margins['left'] == 1 and \
         margins['bottom'] == 2 and margins['right'] == .5
 
     with pytest.raises(Exception):
         canvas.margins(3)
 
-    canvas = Canvas(6,4,margins=0)
-    layout = {'a':(-1,-1),'b':(1,-1),'c':(1,1),'d':(-1,1)}
+    canvas = Canvas(6, 4, margins=0)
+    layout = {'a': (-1, -1), 'b': (1, -1), 'c': (1, 1), 'd': (-1, 1)}
 
     l = canvas.fit(layout)
-    assert l['a'] == (1,0)
-    assert l['b'] == (5,0)
-    assert l['c'] == (5,4)
-    assert l['d'] == (1,4)
+    assert l['a'] == (1, 0)
+    assert l['b'] == (5, 0)
+    assert l['c'] == (5, 4)
+    assert l['d'] == (1, 4)
 
-    l = canvas.fit(layout,keep_aspect_ratio=False)
-    assert l['a'] == (0,0)
-    assert l['b'] == (6,0)
-    assert l['c'] == (6,4)
-    assert l['d'] == (0,4)
+    l = canvas.fit(layout, keep_aspect_ratio=False)
+    assert l['a'] == (0, 0)
+    assert l['b'] == (6, 0)
+    assert l['c'] == (6, 4)
+    assert l['d'] == (0, 4)
+
 
 def test_unit_converter():
-    mm2cm = UnitConverter('mm','cm')
+    mm2cm = UnitConverter('mm', 'cm')
 
     assert mm2cm(10) == 1
     assert mm2cm.convert(10) == 1
 
     with pytest.raises(Exception):
-        mm2m = UnitConverter('mm','m')
+        mm2m = UnitConverter('mm', 'm')
         mm2m(100)
 
 # =============================================================================
 # eof
 #
-# Local Variables: 
+# Local Variables:
 # mode: python
 # mode: linum
 # mode: auto-fill
 # fill-column: 80
-# End:  
+# End:

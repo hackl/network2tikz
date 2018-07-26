@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : __init__.py
 # Creation  : 21 May 2018
-# Time-stamp: <Mon 2018-05-21 17:09 juergen>
+# Time-stamp: <Don 2018-07-26 16:37 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -39,7 +39,8 @@ from .__about__ import(
 
 import logging
 
-def logger(name,level='DEBUG'):
+
+def logger(name, level='DEBUG'):
     """A function to generate logger for the modules."""
     # initialize new logger
     logger = logging.getLogger(name)
@@ -47,7 +48,9 @@ def logger(name,level='DEBUG'):
     logger.setLevel(logging._nameToLevel[level])
     return logger
 
+
 from .plot import plot
+
 
 # =============================================================================
 # eof

@@ -1,13 +1,13 @@
 #!/usr/bin/python -tt
 # -*- coding: utf-8 -*-
 # =============================================================================
-# File      : test_cnet.py 
+# File      : test_cnet.py
 # Creation  : 21 May 2018
-# Time-stamp: <Mon 2018-05-21 15:44 juergen>
+# Time-stamp: <Don 2018-07-26 16:11 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
-# $Id$ 
+# $Id$
 #
 # Description : Test functions for converting cnet networks to tikz-networks
 #
@@ -22,25 +22,27 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # =============================================================================
 
 import pytest
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')))
 
 import cnet as cn
 from network2tikz import plot
 
+
 @pytest.fixture
 def net():
-    net = cn.Network(name = 'my tikz test network',directed=True)
-    net.add_edges_from([('ab','a','b'), ('ac','a','c'), ('cd','c','d'),
-                        ('de','d','e'), ('ec','e','c'), ('cf','c','f'),
-                        ('fa','f','a'), ('fg','f','g'), ('gd','g','d'),
-                        ('gg','g','g')])
+    net = cn.Network(name='my tikz test network', directed=True)
+    net.add_edges_from([('ab', 'a', 'b'), ('ac', 'a', 'c'), ('cd', 'c', 'd'),
+                        ('de', 'd', 'e'), ('ec', 'e', 'c'), ('cf', 'c', 'f'),
+                        ('fa', 'f', 'a'), ('fg', 'f', 'g'), ('gd', 'g', 'd'),
+                        ('gg', 'g', 'g')])
 
     net.nodes['name'] = ['Alice', 'Bob', 'Claire', 'Dennis', 'Esther', 'Frank',
                          'George']
@@ -51,17 +53,21 @@ def net():
                               False, False, False]
     return net
 
+
 @pytest.fixture
 def color_dict():
     return {"m": "blue", "f": "red"}
+
 
 @pytest.fixture
 def shape_dict():
     return {"m": "circle", "f": "rectangle"}
 
+
 @pytest.fixture
 def style_dict():
     return {"m": "{shading=ball}", "f": None}
+
 
 @pytest.fixture
 def layout():
@@ -71,7 +77,8 @@ def layout():
               'g': (9.7608, -12.7)}
     return layout
 
-def test_plot(net,layout,color_dict):
+
+def test_plot(net, layout, color_dict):
 
     # plot(net) # plot_01.png
 
@@ -86,20 +93,22 @@ def test_plot(net,layout,color_dict):
     visual_style['node_opacity'] = .7
     visual_style['node_label'] = net.nodes['name']
     visual_style['node_label_position'] = 'below'
-    visual_style['edge_width'] = [1 + 2 * int(f) for f in net.edges('is_formal')]
+    visual_style['edge_width'] = [
+        1 + 2 * int(f) for f in net.edges('is_formal')]
     visual_style['edge_curved'] = 0.1
-    visual_style['canvas'] = (8,8)
+    visual_style['canvas'] = (8, 8)
     visual_style['margin'] = 1
 
-    plot(net,'network.tex',**visual_style)
+    plot(net, 'network.tex', **visual_style)
 
-    plot(net,'network.csv',**visual_style)
+    plot(net, 'network.csv', **visual_style)
 
-    plot(net,'network.pdf',**visual_style)
+    plot(net, 'network.pdf', **visual_style)
 
-    plot(net,**visual_style)
+    plot(net, **visual_style)
 
-def test_plot_all_options(net,layout,color_dict,shape_dict,style_dict):
+
+def test_plot_all_options(net, layout, color_dict, shape_dict, style_dict):
 
     visual_style = {}
     # node styles
@@ -114,14 +123,15 @@ def test_plot_all_options(net,layout,color_dict,shape_dict,style_dict):
     visual_style['node_label_size'] = 3
     visual_style['node_shape'] = [shape_dict[g] for g in net.nodes('gender')]
     visual_style['node_style'] = [style_dict[g] for g in net.nodes('gender')]
-    visual_style['node_label_off'] = {'e':True}
+    visual_style['node_label_off'] = {'e': True}
     visual_style['node_math_mode'] = [True]
-    visual_style['node_label_as_id'] = {'f':True}
-    visual_style['node_pseudo'] = {'d':True}
+    visual_style['node_label_as_id'] = {'f': True}
+    visual_style['node_pseudo'] = {'d': True}
 
     # edge styles
     # -----------
-    visual_style['edge_width'] = [.3 + .3 * int(f) for f in net.edges('is_formal')]
+    visual_style['edge_width'] = [.3 + .3 *
+                                  int(f) for f in net.edges('is_formal')]
     visual_style['edge_color'] = 'black'
     visual_style['edge_opacity'] = .8
     visual_style['edge_curved'] = 0.1
@@ -129,7 +139,7 @@ def test_plot_all_options(net,layout,color_dict,shape_dict,style_dict):
     visual_style['edge_label_position'] = 'above'
     visual_style['edge_label_distance'] = .6
     visual_style['edge_label_color'] = 'gray'
-    visual_style['edge_label_size'] = {'ac':5}
+    visual_style['edge_label_size'] = {'ac': 5}
     visual_style['edge_style'] = 'dashed'
     visual_style['edge_arrow_size'] = .2
     visual_style['edge_arrow_width'] = .2
@@ -137,34 +147,34 @@ def test_plot_all_options(net,layout,color_dict,shape_dict,style_dict):
     visual_style['edge_loop_size'] = 15
     visual_style['edge_loop_position'] = 90
     visual_style['edge_loop_shape'] = 45
-    visual_style['edge_directed'] = [True,True,False,True,True,False,True,
-                                     True,True,True]
+    visual_style['edge_directed'] = [True, True, False, True, True, False, True,
+                                     True, True, True]
     visual_style['edge_label'][1] = '\\frac{\\alpha}{\\beta}'
-    visual_style['edge_math_mode'] = {'ac':True}
-    visual_style['edge_not_in_bg'] = {'fa':True}
+    visual_style['edge_math_mode'] = {'ac': True}
+    visual_style['edge_not_in_bg'] = {'fa': True}
 
     # general options
     # ---------------
     visual_style['unit'] = 'mm'
     visual_style['layout'] = layout
-    visual_style["margin"] = {'top':5,'bottom':8,'left':5,'right':5}
-    visual_style["canvas"] = (100,60)
+    visual_style["margin"] = {'top': 5, 'bottom': 8, 'left': 5, 'right': 5}
+    visual_style["canvas"] = (100, 60)
     visual_style['keep_aspect_ratio'] = False
 
-    plot(net,'network.tex',**visual_style)
+    plot(net, 'network.tex', **visual_style)
 
-    plot(net,'network.csv',**visual_style)
+    plot(net, 'network.csv', **visual_style)
 
-    plot(net,'network.pdf',**visual_style)
+    plot(net, 'network.pdf', **visual_style)
 
-    plot(net,**visual_style)
+    plot(net, **visual_style)
 
 # =============================================================================
 # eof
 #
-# Local Variables: 
+# Local Variables:
 # mode: python
 # mode: linum
 # mode: auto-fill
 # fill-column: 80
-# End:  
+# End:

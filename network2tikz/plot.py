@@ -1,9 +1,9 @@
 #!/usr/bin/python -tt
 # -*- coding: utf-8 -*-
 # =============================================================================
-# File      : plot.py 
+# File      : plot.py
 # Creation  : 08 May 2018
-# Time-stamp: <Son 2018-05-27 09:43 juergen>
+# Time-stamp: <Don 2018-07-26 16:35 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -22,7 +22,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # =============================================================================
 
 import os
@@ -36,7 +36,8 @@ from .drawing import TikzNetworkDrawer
 
 log = logger(__name__)
 
-def plot(network, filename=None,type=None,**kwds):
+
+def plot(network, filename=None, type=None, **kwds):
     """Plots the network as a tikz-network.
 
     This function generates a plot of the network, thereby different output can
@@ -454,20 +455,21 @@ def plot(network, filename=None,type=None,**kwds):
 
 
     """
-    result = Plot(network,**kwds)
+
+    result = Plot(network, **kwds)
 
     # get properties for the latex compiler
-    _clean = kwds.get('clean',True)
-    _clean_tex = kwds.get('clean_tex',True)
-    _compiler = kwds.get('compiler',None)
-    _compiler_args = kwds.get('compiler_arg',None)
-    _silent = kwds.get('silent',True)
+    _clean = kwds.get('clean', True)
+    _clean_tex = kwds.get('clean_tex', True)
+    _compiler = kwds.get('compiler', None)
+    _compiler_args = kwds.get('compiler_arg', None)
+    _silent = kwds.get('silent', True)
 
     if filename is None:
         filename = 'default_network'
-    if isinstance(filename,tuple) or isinstance(filename,list) or \
-         filename.endswith('.csv') or type == 'csv' or \
-         filename.endswith('.dat') or type == 'dat':
+    if isinstance(filename, tuple) or isinstance(filename, list) or \
+            filename.endswith('.csv') or type == 'csv' or \
+            filename.endswith('.dat') or type == 'dat':
         log.debug('Create csv files')
         result.save_csv(filename)
     elif filename == 'default_network' and type is None:
@@ -475,18 +477,18 @@ def plot(network, filename=None,type=None,**kwds):
         # get current directory
         current_dir = os.getcwd()
         # create temp file name
-        temp_filename = os.path.join(current_dir,filename)
+        temp_filename = os.path.join(current_dir, filename)
         # save a pdf file
         result.save_pdf(filename, clean=_clean, clean_tex=_clean_tex,
                         compiler=_compiler, compiler_args=_compiler_args,
                         silent=_silent)
         # open the file
         webbrowser.open(r'file:///'+temp_filename+'.pdf')
-        #result.show(filename)
+        # result.show(filename)
     elif filename.endswith('.tex') or type == 'tex':
         log.debug('Create tex file')
-        standalone = kwds.get('standalone',True)
-        result.save_tex(filename,standalone=standalone)
+        standalone = kwds.get('standalone', True)
+        result.save_tex(filename, standalone=standalone)
     elif filename.endswith('.pdf') or type == 'pdf':
         log.debug('Create pdf plot')
         result.save_pdf(filename, clean=_clean, clean_tex=_clean_tex,
@@ -494,6 +496,7 @@ def plot(network, filename=None,type=None,**kwds):
                         silent=_silent)
     else:
         log.warn('No valid output option was chosen!')
+
 
 class Plot(object):
     """Default class to create plots.
@@ -517,7 +520,8 @@ class Plot(object):
     plot
 
     """
-    def __init__(self,network,**kwds):
+
+    def __init__(self, network, **kwds):
         """Initialize the Plot class.
 
         Parameters
@@ -531,9 +535,9 @@ class Plot(object):
             See also :py:meth:`plot`
 
         """
-        self.drawer = TikzNetworkDrawer(network,**kwds)
+        self.drawer = TikzNetworkDrawer(network, **kwds)
 
-    def save_tex(self,filename,standalone=True):
+    def save_tex(self, filename, standalone=True):
         """Save the network as a tex file.
 
         Parameters
@@ -550,8 +554,8 @@ class Plot(object):
 
         """
         latex_header = '\\documentclass{standalone}\n' + \
-                        '\\usepackage{tikz-network}\n' + \
-                        '\\begin{document}\n'
+            '\\usepackage{tikz-network}\n' + \
+            '\\begin{document}\n'
         latex_begin_tikz = '\\begin{tikzpicture}\n'
         latex_end_tikz = '\\end{tikzpicture}\n'
         latex_footer = '\\end{document}'
@@ -559,19 +563,19 @@ class Plot(object):
         # margins = self.drawer.margins
         w = self.drawer.canvas.width
         h = self.drawer.canvas.height
-        latex_canvas = '\\clip (0,0) rectangle ({},{});\n'.format(w,h)
+        latex_canvas = '\\clip (0,0) rectangle ({},{});\n'.format(w, h)
 
         # latex_margins = '\\fill[orange!20] ({},{}) rectangle ({},{});\n'\
         #                 ''.format(margins['left'],margins['bottom'],
         #                           canvas[0] - margins['right'],
         #                           canvas[1] - margins['top'])
 
-        with open(filename,'w') as f:
+        with open(filename, 'w') as f:
             if standalone:
                 f.write(latex_header)
             f.write(latex_begin_tikz)
             f.write(latex_canvas)
-            #f.write(latex_margins)
+            # f.write(latex_margins)
 
             for node in self.drawer.node_drawer:
                 f.write(node.draw())
@@ -582,7 +586,7 @@ class Plot(object):
             if standalone:
                 f.write(latex_footer)
 
-    def save_csv(self,filename):
+    def save_csv(self, filename):
         """Save the network as multiple csv files.
 
         Parameters
@@ -596,13 +600,13 @@ class Plot(object):
 
         """
         # if file name is a string get base name
-        if isinstance(filename,str):
+        if isinstance(filename, str):
             basename = os.path.splitext(os.path.basename(filename))[0]
             basename_n = basename + '_nodes'
             basename_e = basename + '_edges'
         # if the file name is a tuple, use the first part for the node list and
         # the second part for the edge list.
-        elif isinstance(filename,tuple) or isinstance(filename,list):
+        elif isinstance(filename, tuple) or isinstance(filename, list):
             basename_n = os.path.splitext(os.path.basename(filename[0]))[0]
             basename_e = os.path.splitext(os.path.basename(filename[1]))[0]
         else:
@@ -610,18 +614,18 @@ class Plot(object):
             raise CnetError
 
         # write node list
-        with open(basename_n+'.csv','w') as f:
+        with open(basename_n+'.csv', 'w') as f:
             f.write(self.drawer.node_drawer[0].head())
             for node in self.drawer.node_drawer:
                 f.write(node.draw(mode='csv'))
 
         # write edge list
-        with open(basename_e+'.csv','w') as f:
+        with open(basename_e+'.csv', 'w') as f:
             f.write(self.drawer.edge_drawer[0].head())
             for edge in self.drawer.edge_drawer:
                 f.write(edge.draw(mode='csv'))
 
-    def save_pdf(self,filename,clean=True, clean_tex=True,
+    def save_pdf(self, filename, clean=True, clean_tex=True,
                  compiler=None, compiler_args=None, silent=True):
         """Save the network as a tex file and compile the pdf.
 
@@ -670,7 +674,7 @@ class Plot(object):
         os.chdir(output_dir)
 
         # save the tex file
-        self.save_tex(basename+'.tex',standalone=True)
+        self.save_tex(basename+'.tex', standalone=True)
 
         if compiler is not None:
             compilers = ((compiler, []),)
@@ -729,8 +733,7 @@ class Plot(object):
         # change back to current dir
         os.chdir(current_dir)
 
-
-    def show(self,filename):
+    def show(self, filename):
         """Show the compiled network.
 
         Create a tex file and compile the pdf out of it. After this is done the
@@ -749,7 +752,7 @@ class Plot(object):
         # get current directory
         current_dir = os.getcwd()
         # create temp file name
-        temp_filename = os.path.join(current_dir,filename)
+        temp_filename = os.path.join(current_dir, filename)
         # save a pdf file
         self.save_pdf(temp_filename)
         # open the file
@@ -759,9 +762,9 @@ class Plot(object):
 # =============================================================================
 # eof
 #
-# Local Variables: 
+# Local Variables:
 # mode: python
 # mode: linum
 # mode: auto-fill
 # fill-column: 80
-# End:  
+# End:
