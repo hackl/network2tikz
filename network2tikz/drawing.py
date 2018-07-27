@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : drawing.py
 # Creation  : 08 May 2018
-# Time-stamp: <Don 2018-07-26 16:36 juergen>
+# Time-stamp: <Fre 2018-07-27 17:41 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -31,6 +31,7 @@ from . import logger
 from .exceptions import CnetError
 from .units import UnitConverter
 from .canvas import Canvas
+from .layout import Layout
 log = logger(__name__)
 
 # TODO: move this to the config file
@@ -83,7 +84,10 @@ class TikzNetworkDrawer(object):
 
         self.node_attributes = {}
         self.edge_attributes = {}
+        self.layout_attributes = {}
         self.general_attributes = {}
+
+        self.adjacency_matrix = None
 
         # check type of network
         if 'cnet' in str(type(network)):
@@ -92,7 +96,7 @@ class TikzNetworkDrawer(object):
                 self.edges[e] = n
             self.nodes = list(network.nodes)
             self.directed = network.directed
-
+            self.adjacency_matrix = network.adjacency_matrix()
         elif 'networkx' in str(type(network)):
             log.debug('The network is of type "networkx".')
             for e in network.edges():
@@ -138,22 +142,26 @@ class TikzNetworkDrawer(object):
         used in the remaining code. This allows to keep the keywords used in
         'igrap'.
 
-        ======= =================
-        keys    other valid keys
-        ======= =================
-        node    vertex, v, n
-        edge    link, l, e
-        margins margin
-        canvas  bbox, figure_size
-        units   unit
-        ======= =================
+        ========= ===========================
+        keys      other valid keys
+        ========= ===========================
+        node      vertex, v, n
+        edge      link, l, e
+        margins   margin
+        canvas    bbox, figure_size
+        units     unit
+        fixed     fixed_nodes, fixed_vertices
+        positions initial_positions
+        ========= ===========================
 
         """
         names = {'node_': ['vertex_', 'v_', 'n_'],
                  'edge_': ['edge_', 'link_', 'l_', 'e_'],
                  'margins': ['margin'],
                  'canvas': ['bbox', 'figure_size'],
-                 'units': ['units', 'unit']
+                 'units': ['units', 'unit'],
+                 'fixed': ['fixed_nodes', 'fixed_vertices'],
+                 'positions': ['initial_positions']
                  }
         _kwds = {}
         del_keys = []
@@ -182,6 +190,13 @@ class TikzNetworkDrawer(object):
                 self.node_attributes[key] = self.format_node_value(value)
             elif 'edge_' in key:
                 self.edge_attributes[key] = self.format_edge_value(value)
+            elif 'layout_' in key:
+                if 'fixed' in key or 'positions' in key:
+                    self.layout_attributes[key] = self.format_node_value(value)
+                elif 'weight' in key:
+                    self.layout_attributes[key] = self.format_edge_value(value)
+                else:
+                    self.layout_attributes[key] = value
             else:
                 self.general_attributes[key] = value
 
@@ -201,14 +216,17 @@ class TikzNetworkDrawer(object):
 
         # configure the layout
         # check if a layout is defined
-        if self.attributes.get('layout', None) is not None:
-            self.layout = self.format_node_value(self.attributes['layout'])
+        _layout = self.attributes.get('layout', None)
+        if isinstance(_layout, str) or _layout is None:
+            self.layout_attributes['layout'] = _layout
+            self.layout = Layout(self.nodes, self.adjacency_matrix,
+                                 **self.layout_attributes).generate_layout()
         else:
-            log.warn('No layout was assigned! '
-                     'Hence a random layout was chosen!')
-            self.layout = {}
-            for node in self.nodes:
-                self.layout[node] = (np.random.rand(), np.random.rand())
+            self.layout = self.format_node_value(self.attributes['layout'])
+
+        # self.layout = {}
+        # for node in self.nodes:
+        #     self.layout[node] = (np.random.rand(), np.random.rand())
 
         # fit the node position to the chosen canvas
         k_a_r = self.general_attributes.get('keep_aspect_ratio', True)

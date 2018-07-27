@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_layout.py
 # Creation  : 17 July 2018
-# Time-stamp: <Don 2018-07-26 18:38 juergen>
+# Time-stamp: <Fre 2018-07-27 17:52 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -84,7 +84,7 @@ def test_fruchterman_reingold(net):
     net.summary()
     A = net.adjacency_matrix().todense()
     print(A.shape)
-    L = Layout(net)
+    #L = Layout(net)
     # layout = L._fruchterman_reingold(A)
 
     # print(layout)
@@ -92,14 +92,15 @@ def test_fruchterman_reingold(net):
                'd': (3, 3), 'e': (4, 4), 'f': (5, 5), 'g': (6, 6)}
 
     #layout = L.fruchterman_reingold(net, layout=_layout, fixed=['a', 'b'])
-    layout = L.fruchterman_reingold(net)
-    print(layout)
-    # visual_style = {}
-    # visual_style['layout'] = layout
-    # visual_style['canvas'] = (10, 10)
-    # visual_style['margin'] = 1
-    # #visual_style['keep_aspect_ratio'] = False
-    # plot(net, **visual_style)
+    #layout = L.fruchterman_reingold(net)
+    # layout = L.random()
+    # print(layout)
+    visual_style = {}
+    visual_style['layout'] = 'fr'
+    visual_style['canvas'] = (10, 10)
+    visual_style['margin'] = 1
+    #visual_style['keep_aspect_ratio'] = False
+    plot(net, **visual_style)
 
 
 

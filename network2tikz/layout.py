@@ -4,7 +4,7 @@
 # File      : layout.py -- Module to layout the network
 # Author    : Juergen Hackl <hackl@ibi.baug.ethz.ch>
 # Creation  : 2018-07-26
-# Time-stamp: <Don 2018-07-26 18:36 juergen>
+# Time-stamp: <Fre 2018-07-27 17:55 juergen>
 #
 # Copyright (c) 2018 Juergen Hackl <hackl@ibi.baug.ethz.ch>
 #
@@ -28,24 +28,49 @@ from .exceptions import CnetError
 log = logger(__name__)
 
 
+def layout(network, **kwds):
+    pass
+
+
 class Layout(object):
     """Documentation for Layout
 
     """
 
-    def __init__(self, network, **kwds):
-        self.network = network
-        # self.layout
+    def __init__(self, nodes, adjacency_matrix, **attr):
+        self.nodes = nodes
+        self.adjacency_matrix = adjacency_matrix
 
-    def fruchterman_reingold(self, network,
-                             k=None,
-                             layout=None,
-                             fixed=None,
-                             iterations=50,
-                             threshold=1e-4,
-                             weight=None,
-                             dimension=2,
-                             seed=None):
+        # options for the layouts
+        self.layout_type = attr.get('layout', None)
+        self.k = attr.get('layout_force', None,)
+        self.fixed = attr.get('layout_fixed', None)
+        self.iterations = attr.get('layout_iterations', 50)
+        self.threshold = attr.get('layout_threshold', 1e-4)
+        self.weight = attr.get('layout_weight', None)
+        self.dimension = attr.get('layout_dimension', 2)
+        self.seed = attr.get('layout_seed', None)
+        self.positions = attr.get('layout_positions', None)
+
+    def generate_layout(self):
+        # method names
+        names_rand = ['Random', 'random', 'rand', None]
+        names_fr = ['Fruchterman-Reingold', 'fruchterman_reingold', 'fr',
+                    'spring_layout', 'spring layout', 'FR']
+        # check which layout should be plotted
+        if self.layout_type in names_rand:
+            self.layout = self.random()
+        elif self.layout_type in names_fr:
+            self.layout = self.fruchterman_reingold()
+
+        # print(self.layout)
+        return self.layout
+
+    def random(self):
+        layout = np.random.rand(len(self.nodes), self.dimension)
+        return dict(zip(self.nodes, layout))
+
+    def fruchterman_reingold(self):
         """Position nodes using Fruchterman-Reingold force-directed algorithm.
 
         Parameters
@@ -102,51 +127,47 @@ class Layout(object):
         >>> pos = nx.fruchterman_reingold_layout(G)
         """
 
-        if fixed is not None:
-            fixed = np.asarray([network.nodes.index(v) for v in fixed])
+        if self.fixed is not None:
+            self.fixed = np.asarray([self.nodes.index(v) for v in self.fixed])
 
-        if layout is not None:
+        if self.positions is not None:
             # Determine size of existing domain to adjust initial positions
             _size = max(coord for t in layout.values() for coord in t)
             if _size == 0:
                 _size = 1
-            _layout = np.random.rand(
-                network.number_of_nodes(), dimension) * _size
+            self.layout = np.random.rand(
+                len(self.nodes), self.dimension) * _size
 
-            for i, n in enumerate(network.nodes):
-                if n in layout:
-                    _layout[i] = np.asarray(layout[n])
+            for i, n in enumerate(self.nodes):
+                if n in self.positions:
+                    self.layout[i] = np.asarray(self.positions[n])
         else:
-            _layout = None
+            self.layout = None
 
-        if k is None and fixed is not None:
+        if self.k is None and self.fixed is not None:
             # We must adjust k by domain size for layouts not near 1x1
-            k = _size / np.sqrt(network.number_of_nodes())
+            self.k = _size / np.sqrt(len(self.nodes))
 
         try:
             # Sparse matrix
-            if network.number_of_nodes() < 500:  # sparse solver for large graphs
+            if len(self.nodes) < 500:  # sparse solver for large graphs
                 raise ValueError
-            A = network.adjacency_matrix(weight=weight)
-            layout = self._sparse_fruchterman_reingold(A, k, _layout, fixed,
-                                                       iterations, threshold,
-                                                       dimension, seed)
+            layout = self._sparse_fruchterman_reingold()
         except:
-            A = network.adjacency_matrix(weight=weight).todense()
-            layout = self._fruchterman_reingold(A, k, _layout, fixed, iterations,
-                                                threshold, dimension, seed)
+            layout = self._fruchterman_reingold()
 
-        layout = dict(zip(network.nodes, layout))
+        layout = dict(zip(self.nodes, layout))
 
         return layout
 
-    def _fruchterman_reingold(self, A, k=None, layout=None, fixed=None, iterations=50,
-                              threshold=1e-4, dimension=2, seed=None):
+    def _fruchterman_reingold(self):
         """Fruchterman-Reingold algorithm.
 
         This algorithm is based on the Fruchterman-Reingold algorithm provided
         by networkx.
         """
+        A = self.adjacency_matrix.todense()
+        k = self.k
         try:
             _n, _ = A.shape
         except AttributeError:
@@ -157,12 +178,13 @@ class Layout(object):
         # make sure we have an array instead of a matrix
         A = np.asarray(A)
 
-        if layout is None:
+        if self.layout is None:
             # random initial positions
-            layout = np.asarray(np.random.rand(_n, dimension), dtype=A.dtype)
+            layout = np.asarray(np.random.rand(
+                _n, self.dimension), dtype=A.dtype)
         else:
             # make sure positions are of same type as matrix
-            layout = layout.astype(A.dtype)
+            layout = self.layout.astype(A.dtype)
 
         # optimal distance between nodes
         if k is None:
@@ -175,13 +197,13 @@ class Layout(object):
                 max(layout.T[1]) - min(layout.T[1])) * 0.1
         # simple cooling scheme.
         # linearly step down by dt on each iteration so last iteration is size dt.
-        dt = t / float(iterations + 1)
+        dt = t / float(self.iterations + 1)
         delta = np.zeros(
             (layout.shape[0], layout.shape[0], layout.shape[1]), dtype=A.dtype)
         # the inscrutable (but fast) version
         # this is still O(V^2)
         # could use multilevel methods to speed this up significantly
-        for iteration in range(iterations):
+        for iteration in range(self.iterations):
             # matrix of difference between points
             delta = layout[:, np.newaxis, :] - layout[np.newaxis, :, :]
             # distance between points
@@ -196,21 +218,97 @@ class Layout(object):
             length = np.linalg.norm(displacement, axis=-1)
             length = np.where(length < 0.01, 0.1, length)
             delta_layout = np.einsum('ij,i->ij', displacement, t / length)
-            if fixed is not None:
+            if self.fixed is not None:
                 # don't change positions of fixed nodes
-                delta_layout[fixed] = 0.0
+                delta_layout[self.fixed] = 0.0
             layout += delta_layout
             # cool temperature
             t -= dt
             error = np.linalg.norm(delta_layout) / _n
-            if error < threshold:
+            if error < self.threshold:
                 break
         return layout
 
-    def _sparse_fruchterman_reingold(self, A, k=None, layout=None, fixed=None,
-                                     iterations=50, threshold=1e-4, dimension=2,
-                                     seed=None):
-        pass
+    def _sparse_fruchterman_reingold(self):
+        """Fruchterman-Reingold algorithm.
+
+        This algorithm is based on the Fruchterman-Reingold algorithm provided
+        by networkx.
+        """
+        A = self.adjacency_matrix
+        k = self.k
+        try:
+            _n, _ = A.shape
+        except AttributeError:
+            log.error('Fruchterman-Reingold algorithm needs an adjacency '
+                      'matrix as input')
+            raise CnetError
+        try:
+            from scipy.sparse import spdiags, coo_matrix
+        except ImportError:
+            log.error('The sparse Fruchterman-Reingold algorithm needs the '
+                      'scipy package: http://scipy.org/')
+            raise ImportError
+        # make sure we have a LIst of Lists representation
+        try:
+            A = A.tolil()
+        except:
+            A = (coo_matrix(A)).tolil()
+
+        if self.layout is None:
+            # random initial positions
+            layout = np.asarray(np.random.rand(
+                _n, self.dimension), dtype=A.dtype)
+        else:
+            # make sure positions are of same type as matrix
+            layout = layout.astype(A.dtype)
+
+        # no fixed nodes
+        if self.fixed is None:
+            self.fixed = []
+
+        # optimal distance between nodes
+        if k is None:
+            k = np.sqrt(1.0 / _n)
+        # the initial "temperature"  is about .1 of domain area (=1x1)
+        # this is the largest step allowed in the dynamics.
+        t = max(max(layout.T[0]) - min(layout.T[0]),
+                max(layout.T[1]) - min(layout.T[1])) * 0.1
+        # simple cooling scheme.
+        # linearly step down by dt on each iteration so last iteration is size dt.
+        dt = t / float(self.iterations + 1)
+
+        displacement = np.zeros((self.dimension, _n))
+        for iteration in range(self.iterations):
+            displacement *= 0
+            # loop over rows
+            for i in range(A.shape[0]):
+                if i in self.fixed:
+                    continue
+                # difference between this row's node position and all others
+                delta = (layout[i] - layout).T
+                # distance between points
+                distance = np.sqrt((delta**2).sum(axis=0))
+                # enforce minimum distance of 0.01
+                distance = np.where(distance < 0.01, 0.01, distance)
+                # the adjacency matrix row
+                Ai = np.asarray(A.getrowview(i).toarray())
+                # displacement "force"
+                displacement[:, i] +=\
+                    (delta * (k * k / distance**2 - Ai * distance / k)).sum(axis=1)
+            # update positions
+            length = np.sqrt((displacement**2).sum(axis=0))
+            length = np.where(length < 0.01, 0.1, length)
+            delta_layout = (displacement * t / length).T
+            layout += delta_layout
+            # cool temperature
+            t -= dt
+            err = np.linalg.norm(delta_layout) / _n
+            if err < self.threshold:
+                break
+        return layout
+
+
 # =============================================================================
 # eof
 #
