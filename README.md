@@ -2,11 +2,11 @@
 
 | Module:  | network2tikz |
 |----------|--------------|
-| Date:    | 17 July 2018  |
+| Date:    | 29 July 2018  |
 | Authors: | Jürgen Hackl |
 | Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
 | License: | GNU GPLv3    |
-| Version: | 0.1.3        |
+| Version: | 0.1.4        |
 
 This is `network2tikz`, a Python tool for converting network
 visualizations into [TikZ](https://www.ctan.org/pkg/pgf)
@@ -480,6 +480,72 @@ network2tikz.plot(network, filename=None, type=None, **kwds)
   appear also on top of them. To turn this off, the option edge_not_in_bg
   has to be enabled.
 
+### Keyword arguments for layout styles
+
+    NOTE: All layout arguments can be entered with or without 'layout_' at the
+    beginning, e.g. 'layout_iterations' is equal to 'iterations'
+
+- ``layout`` : dict or string , optional (default = None)
+  A dictionary with the node positions on a 2-dimensional plane. The
+  key value of the dict represents the node id while the value
+  represents a tuple of coordinates (e.g. n = (x,y)). The initial
+  layout can be placed anywhere on the 2-dimensional plane.
+
+  Instead of a dictionary, the algorithm used for the layout can be defined
+  via a string value. Currently, supported are:
+
+  * Random layout, where the nodes are uniformly at random placed in the
+    unit square. This algorithm can be enabled with the keywords: 'Random',
+    'random', 'rand', or None
+
+  * Fruchterman-Reingold force-directed algorithm. In this algorithm, the
+    nodes are represented by steel rings and the edges are springs between
+    them. The attractive force is analogous to the spring force and the
+    repulsive force is analogous to the electrical force. The basic idea is
+    to minimize the energy of the system by moving the nodes and changing
+    the forces between them. This algorithm can be enabled with the
+    keywords: 'Fruchterman-Reingold', 'fruchterman_reingold', 'fr',
+    'spring_layout', 'spring layout', 'FR'
+
+ | Algorithms           | Keywords                                       |
+ |----------------------|------------------------------------------------|
+ | Random               | Random, random, rand, None                     |
+ | Fruchterman-Reingold | Fruchterman-Reingold, fruchterman_reingold, fr |
+ |                      | spring_layout, spring layout, FR               |
+
+- ``force`` : float, optional (default = None)
+  Optimal distance between nodes.  If None the distance is set to
+  1/sqrt(n) where n is the number of nodes.  Increase this value to move
+  nodes farther apart.
+
+- ``positions`` : dict or None  optional (default = None)
+  Initial positions for nodes as a dictionary with node as keys and values
+  as a coordinate list or tuple.  If None, then use random initial
+  positions.
+
+- ``fixed`` : list or None, optional (default = None)
+  Nodes to keep fixed at initial position.
+
+- ``iterations`` : int, optional (default = 50)
+  Maximum number of iterations taken
+
+- ``threshold``: float, optional (default = 1e-4)
+  Threshold for relative error in node position changes.  The iteration
+  stops if the error is below this threshold.
+
+- ``weight`` : string or None, optional (default = None)
+  The edge attribute that holds the numerical value used for the edge
+  weight.  If None, then all edge weights are 1.
+
+- ``dimension`` : int, optional (default = 2)
+  Dimension of layout. Currently, only plots in 2 dimension are supported.
+
+- ``seed`` : int or None, optional (default = None)
+  Set the random state for deterministic node layouts. If int, `seed` is
+  the seed used by the random number generator, if None, the a random seed
+  by created by the numpy random number generator is used.
+
+
 ### Keyword arguments for general options
 
 - ``units`` : string or tuple of strings, optional (default = ('cm','pt'))
@@ -490,12 +556,6 @@ network2tikz.plot(network, filename=None, type=None, **kwds)
   unit all inputs have to be defined using this unit. If a tuple of units
   is given, the sizes are defined with the first entry the line widths with
   the second entry.
-
-- ``layout`` : dict
-  A dictionary with the node positions on a 2-dimensional plane. The
-  key value of the dict represents the node id while the value
-  represents a tuple of coordinates (e.g. n = (x,y)). The initial
-  layout can be placed anywhere on the 2-dimensional plane.
 
 - ``margins`` : None, int, float or dict, optional (default = None)
   The margins define the 'empty' space from the canvas border. If no
@@ -550,23 +610,31 @@ used in the remaining code. This allows to keep the keywords used in
 `igraph`.
 
 
-| keys    | other valid keys  |
-|---------|-------------------|
-| node    | vertex, v, n      |
-| edge    | link, l, e        |
-| margins | margin            |
-| canvas  | bbox, figure_size |
-| units   | unit              |
+| keys      | other valid keys                  |
+|-----------|-----------------------------------|
+| node      | vertex, v, n                      |
+| edge      | link, l, e                        |
+| margins   | margin                            |
+| canvas    | bbox, figure_size                 |
+| units     | unit                              |
+| fixed     | fixed_nodes, fixed_vertices,      |
+|           | fixed_n, fixed_v                  |
+| positions | initial_positions, node_positions |
+|           | vertex_positions, n_positions,    |
+|           | v_positions                       |
+
 
 ## TODO
 
 - [ ] Add multi-layer handler
-- [ ] Add layout generating functions
 
 ## Changelog
-| Version | Date | Changes |
-|---------|------|---------|
-| 0.1.0   | 2018-05-21 | initial commit to github |
-| 0.1.1   | 2018-05-22 | initial commit to PyPI   |
-| 0.1.2   | 2018-05-27 | fixed Windows compiling problem |
+| Version | Date       | Changes                                        |
+|---------|------------|------------------------------------------------|
+| 0.1.0   | 2018-05-21 | initial commit to github                       |
+| 0.1.1   | 2018-05-22 | initial commit to PyPI                         |
+| 0.1.2   | 2018-05-27 | fixed Windows compiling problem                |
 | 0.1.3   | 2018-07-17 | fixed layout problem when coordinates are zero |
+| 0.1.4   | 2018-07-29 | added some layouts algorithms                  |
+
+

@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_igraph.py
 # Creation  : 21 May 2018
-# Time-stamp: <Don 2018-07-26 16:39 juergen>
+# Time-stamp: <Son 2018-07-29 15:19 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -33,7 +33,7 @@ sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..')))
 
 import networkx as nx
-from network2tikz import plot
+from network2tikz import plot, layout
 
 
 @pytest.fixture
@@ -76,7 +76,7 @@ def style_dict():
 
 
 @pytest.fixture
-def layout():
+def _layout():
     layout = {'a': (4.3191, -3.5352), 'b': (0.5292, -0.5292),
               'c': (8.6559, -3.8008), 'd': (12.4117, -7.5239),
               'e': (12.7, -1.7069), 'f': (6.0022, -9.0323),
@@ -84,7 +84,7 @@ def layout():
     return layout
 
 
-def test_plot(net, layout, color_dict):
+def test_plot(net, _layout, color_dict):
 
     # plot(net) # plot_01.png
 
@@ -115,7 +115,7 @@ def test_plot(net, layout, color_dict):
     plot(net, **visual_style)
 
 
-def test_plot_all_options(net, layout, color_dict, shape_dict, style_dict):
+def test_plot_all_options(net, _layout, color_dict, shape_dict, style_dict):
 
     visual_style = {}
     # node styles
@@ -180,6 +180,17 @@ def test_plot_all_options(net, layout, color_dict, shape_dict, style_dict):
     plot(net, 'network.pdf', **visual_style)
 
     plot(net, **visual_style)
+
+
+def test_layout(net):
+
+    layout_style = {}
+    layout_style['layout'] = 'fr'
+    layout_style['seed'] = 1
+    _layout = layout(net, **layout_style)
+
+    plot(net, layout=_layout)
+
 
 # =============================================================================
 # eof

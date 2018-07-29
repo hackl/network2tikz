@@ -17,6 +17,12 @@ The plot method
 .. currentmodule:: network2tikz
 .. autofunction:: plot
 
+The layout method
+=================
+
+.. currentmodule:: network2tikz
+.. autofunction:: layout
+
 Indices and tables
 ==================
 

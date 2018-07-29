@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : __init__.py
 # Creation  : 21 May 2018
-# Time-stamp: <Don 2018-07-26 16:37 juergen>
+# Time-stamp: <Son 2018-07-29 15:05 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -40,7 +40,7 @@ from .__about__ import(
 import logging
 
 
-def logger(name, level='DEBUG'):
+def logger(name, level='INFO'):
     """A function to generate logger for the modules."""
     # initialize new logger
     logger = logging.getLogger(name)
@@ -50,7 +50,7 @@ def logger(name, level='DEBUG'):
 
 
 from .plot import plot
-
+from .layout import layout
 
 # =============================================================================
 # eof

@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_layout.py
 # Creation  : 17 July 2018
-# Time-stamp: <Fre 2018-07-27 17:52 juergen>
+# Time-stamp: <Son 2018-07-29 15:51 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -33,7 +33,7 @@ sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..')))
 
 from network2tikz import plot
-from network2tikz.layout import Layout
+from network2tikz.layout import Layout, layout
 import cnet as cn
 
 
@@ -44,6 +44,16 @@ def net():
                         ('de', 'd', 'e'), ('ec', 'e', 'c'), ('cf', 'c', 'f'),
                         ('fa', 'f', 'a'), ('fg', 'f', 'g'), ('gd', 'g', 'd'),
                         ('gg', 'g', 'g')])
+    net.edges['ab']['force'] = 3
+    net.edges['ac']['force'] = 2
+    net.edges['cd']['force'] = 1
+    net.edges['de']['force'] = 1
+    net.edges['ec']['force'] = 3
+    net.edges['cf']['force'] = 1
+    net.edges['fa']['force'] = 1
+    net.edges['fg']['force'] = 1
+    net.edges['gd']['force'] = 1
+    net.edges['gg']['force'] = 1
 
     net.nodes['name'] = ['Alice', 'Bob', 'Claire', 'Dennis', 'Esther', 'Frank',
                          'George']
@@ -91,21 +101,29 @@ def test_fruchterman_reingold(net):
     _layout = {'a': (0, 0), 'b': (1, 1), 'c': (2, 2),
                'd': (3, 3), 'e': (4, 4), 'f': (5, 5), 'g': (6, 6)}
 
-    #layout = L.fruchterman_reingold(net, layout=_layout, fixed=['a', 'b'])
-    #layout = L.fruchterman_reingold(net)
-    # layout = L.random()
-    # print(layout)
+    layout_style = {}
+    layout_style['layout'] = 'fr'
+    layout_style['layout_seed'] = 1
+    layout_style['layout_weight'] = 'force'
+    _layout = layout(net, **layout_style)
+
     visual_style = {}
-    visual_style['layout'] = 'fr'
+    visual_style['node_label_as_id'] = True
+    visual_style['layout'] = _layout
     visual_style['canvas'] = (10, 10)
     visual_style['margin'] = 1
-    #visual_style['keep_aspect_ratio'] = False
+    plot(net, **visual_style)
+
+    visual_style = {}
+    visual_style['node_label_as_id'] = True
+    visual_style['canvas'] = (10, 10)
+    visual_style['margin'] = 1
+    visual_style['layout'] = 'fr'  # _layout
+    visual_style['layout_seed'] = 1
+    visual_style['layout_weight'] = 'force'
     plot(net, **visual_style)
 
 
-
-    # test_layout(net())
-test_fruchterman_reingold(net())
 # =============================================================================
 # eof
 #

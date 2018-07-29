@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : drawing.py
 # Creation  : 08 May 2018
-# Time-stamp: <Fre 2018-07-27 17:41 juergen>
+# Time-stamp: <Son 2018-07-29 15:59 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -89,44 +89,71 @@ class TikzNetworkDrawer(object):
 
         self.adjacency_matrix = None
 
+        # TODO: find a nicer way to do this checks
+        # check if a layout is given or should be generated
+        _layout = False
+        if isinstance(kwds.get('layout', None), str):
+            _layout = True
+        # check if the layout is weighted
+        _weight = kwds.get('weight', None)
+        if _weight is None:
+            _weight = kwds.get('layout_weight', None)
+
         # check type of network
         if 'cnet' in str(type(network)):
-            log.debug('The network is of type "cnet".')
+            # log.debug('The network is of type "cnet".')
             for e, n in network.edges(nodes=True):
                 self.edges[e] = n
             self.nodes = list(network.nodes)
             self.directed = network.directed
-            self.adjacency_matrix = network.adjacency_matrix()
+            if _layout:
+                self.adjacency_matrix = network.adjacency_matrix(weight=_weight)
+
         elif 'networkx' in str(type(network)):
-            log.debug('The network is of type "networkx".')
+            # log.debug('The network is of type "networkx".')
             for e in network.edges():
                 self.edges[e] = e
             self.nodes = list(network.nodes())
             self.directed = network.is_directed()
+            if _layout:
+                import networkx as nx
+                adjacency_matrix = nx.adjacency_matrix(network, weight=_weight)
 
         elif 'igraph' in str(type(network)):
-            log.debug('The network is of type "igraph".')
+            # log.debug('The network is of type "igraph".')
             for i in range(len(network.es)):
                 self.edges[i] = network.es[i].tuple
             self.nodes = list(range(len(network.vs)))
             self.directed = network.is_directed()
+            if _layout:
+                from scipy.sparse import coo_matrix
+                A = np.array(network.get_adjacency(attribute=_weight).data)
+                adjacency_matrix = coo_matrix(A)
 
         elif 'pathpy' in str(type(network)):
-            log.debug('The network is of type "pathpy".')
+            # log.debug('The network is of type "pathpy".')
             for e in network.edges:
                 self.edges[e] = e
             self.nodes = list(network.nodes)
             self.directed = network.directed
+            if _layout:
+                if _weight is not None:
+                    _w = True
+                else:
+                    _w = False
+            adjacency_matrix = network.adjacency_matrix(weighted=_w)
 
         elif isinstance(network, tuple):
-            log.debug('The network is of type "list".')
+            # log.debug('The network is of type "list".')
             self.nodes = network[0]
             for e in network[1]:
                 self.edges[e] = e
+
         else:
             log.error('Type of the network could not be determined.'
                       ' Currently only "cnet", "networkx","igraph", "pathpy"'
                       ' and "node/edge list" is supported!')
+            raise CnetNotImplemented
 
         # assign attributes to the class
         self.attributes = kwds
@@ -150,8 +177,6 @@ class TikzNetworkDrawer(object):
         margins   margin
         canvas    bbox, figure_size
         units     unit
-        fixed     fixed_nodes, fixed_vertices
-        positions initial_positions
         ========= ===========================
 
         """
@@ -160,8 +185,6 @@ class TikzNetworkDrawer(object):
                  'margins': ['margin'],
                  'canvas': ['bbox', 'figure_size'],
                  'units': ['units', 'unit'],
-                 'fixed': ['fixed_nodes', 'fixed_vertices'],
-                 'positions': ['initial_positions']
                  }
         _kwds = {}
         del_keys = []
@@ -190,15 +213,20 @@ class TikzNetworkDrawer(object):
                 self.node_attributes[key] = self.format_node_value(value)
             elif 'edge_' in key:
                 self.edge_attributes[key] = self.format_edge_value(value)
-            elif 'layout_' in key:
-                if 'fixed' in key or 'positions' in key:
-                    self.layout_attributes[key] = self.format_node_value(value)
-                elif 'weight' in key:
-                    self.layout_attributes[key] = self.format_edge_value(value)
-                else:
-                    self.layout_attributes[key] = value
+            # elif 'layout_' in key:
+            #     if 'fixed' in key or 'positions' in key:
+            #         self.layout_attributes[key] = self.format_node_value(value)
+            #     elif 'weight' in key:
+            #         self.layout_attributes[key] = self.format_edge_value(value)
+            #     else:
+            #         self.layout_attributes[key] = value
             else:
-                self.general_attributes[key] = value
+                if 'fixed' in key or 'positions' in key:
+                    self.general_attributes[key] = self.format_node_value(value)
+                elif 'weight' in key:
+                    self.general_attributes[key] = self.format_edge_value(value)
+                else:
+                    self.general_attributes[key] = value
 
         # check if network is directed and nothing other is defined
         if self.directed and \
@@ -218,9 +246,9 @@ class TikzNetworkDrawer(object):
         # check if a layout is defined
         _layout = self.attributes.get('layout', None)
         if isinstance(_layout, str) or _layout is None:
-            self.layout_attributes['layout'] = _layout
+            self.general_attributes['layout'] = _layout
             self.layout = Layout(self.nodes, self.adjacency_matrix,
-                                 **self.layout_attributes).generate_layout()
+                                 **self.general_attributes).generate_layout()
         else:
             self.layout = self.format_node_value(self.attributes['layout'])
 
