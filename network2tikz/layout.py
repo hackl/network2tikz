@@ -4,7 +4,7 @@
 # File      : layout.py -- Module to layout the network
 # Author    : Juergen Hackl <hackl@ibi.baug.ethz.ch>
 # Creation  : 2018-07-26
-# Time-stamp: <Son 2018-07-29 16:04 juergen>
+# Time-stamp: <Mon 2018-07-30 10:35 juergen>
 #
 # Copyright (c) 2018 Juergen Hackl <hackl@ibi.baug.ethz.ch>
 #
@@ -299,7 +299,7 @@ class Layout(object):
 
         # initialize variables
         self.nodes = nodes
-        self.adjacency_matrix = adjacency_matrix.astype(float)
+        self.adjacency_matrix = adjacency_matrix
 
         # rename the attributes
         attr = self.rename_attributes(**attr)
@@ -461,6 +461,9 @@ class Layout(object):
             A dictionary of positions keyed by node
 
         """
+
+        # convert adjacency matrix
+        self.adjacency_matrix = self.adjacency_matrix.astype(float)
 
         if self.fixed is not None:
             self.fixed = np.asarray([self.nodes.index(v) for v in self.fixed])
