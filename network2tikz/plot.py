@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : plot.py
 # Creation  : 08 May 2018
-# Time-stamp: <Son 2018-07-29 16:04 juergen>
+# Time-stamp: <Mon 2018-07-30 16:05 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -37,7 +37,7 @@ from .drawing import TikzNetworkDrawer
 log = logger(__name__)
 
 
-def plot(network, filename=None, type=None, **kwds):
+class Plot(object):
     """Plots the network as a tikz-network.
 
     This function generates a plot of the network, thereby different output can
@@ -521,73 +521,52 @@ def plot(network, filename=None, type=None, **kwds):
 
     """
 
-    result = Plot(network, **kwds)
+    def __init__(self):
+        """Initialize the Plot class."""
 
-    # get properties for the latex compiler
-    _clean = kwds.get('clean', True)
-    _clean_tex = kwds.get('clean_tex', True)
-    _compiler = kwds.get('compiler', None)
-    _compiler_args = kwds.get('compiler_arg', None)
-    _silent = kwds.get('silent', True)
+        self.drawers = []
+        self.filename = 'default_network'
+        pass
 
-    if filename is None:
-        filename = 'default_network'
-    if isinstance(filename, tuple) or isinstance(filename, list) or \
-            filename.endswith('.csv') or type == 'csv' or \
-            filename.endswith('.dat') or type == 'dat':
-        # log.debug('Create csv files')
-        result.save_csv(filename)
-    elif filename == 'default_network' and type is None:
-        # log.debug('Show the network')
-        # get current directory
-        current_dir = os.getcwd()
-        # create temp file name
-        temp_filename = os.path.join(current_dir, filename)
-        # save a pdf file
-        result.save_pdf(filename, clean=_clean, clean_tex=_clean_tex,
-                        compiler=_compiler, compiler_args=_compiler_args,
-                        silent=_silent)
-        # open the file
-        webbrowser.open(r'file:///'+temp_filename+'.pdf')
-        # result.show(filename)
-    elif filename.endswith('.tex') or type == 'tex':
-        # log.debug('Create tex file')
-        standalone = kwds.get('standalone', True)
-        result.save_tex(filename, standalone=standalone)
-    elif filename.endswith('.pdf') or type == 'pdf':
-        # log.debug('Create pdf plot')
-        result.save_pdf(filename, clean=_clean, clean_tex=_clean_tex,
-                        compiler=_compiler, compiler_args=_compiler_args,
-                        silent=_silent)
-    else:
-        log.warn('No valid output option was chosen!')
+    def __call__(self, network=None, filename=None, type=None, **kwds):
+        """Call the plot function and plot or show the results.
 
+        Parameters
+        ----------
+        network : network object
+            Network to be drawn. The network can be a 'cnet', 'networkx',
+            'igraph', 'pathpy' object, or a tuple of a node list and edge list.
 
-class Plot(object):
-    """Default class to create plots.
+        filename : file, string or None, optional (default = None)
+            File or filename to save. The file ending specifies the
+            output. i.e. is the file ending with '.tex' a tex file will be
+            created; if the file ends with '.pdf' a pdf is created; if the file
+            ends with '.csv', two csv files are generated (filename_nodes.csv
+            and filename_edges.csv). If the filename is a tuple of strings, the
+            first entry will be used to name the node list and the second entry
+            for the edge list; and if no ending and no type is defined a
+            temporary pdf file is compiled and shown.
 
-    The :py:class:`Plot` class is used to generate a network drawer and save the
-    virtual network as a 'pdf', 'tex' or 'csv' file. Also a temporary file can
-    be created to show the network figure.
+        type : str or None, optional (default = None)
+            Type of the output file. If no ending is defined trough the filename,
+            the type of the output file can be specified by the type
+            option. Currently the following output types are supported:
+            'tex', 'pdf', 'csv' and 'dat'.
 
-    Parameters
-    ----------
-    network : network object
-        Network to be drawn. The network can be a 'cnet', 'networkx', 'igraph',
-        'pathpy' object, or a tuple of a node list and edge list.
+        kwds : keyword arguments, optional (default= no attributes)
+            Attributes to add to the drawer as key=value pairs.
+            See also :py:class:`Plot`
 
-    kwds : keyword arguments, optional (default= no attributes)
-        Attributes to add to the drawer as key=value pairs.
-        See also :py:meth:`plot`
+        See Also
+        --------
+        Plot
 
-    See Also
-    --------
-    plot
+        """
+        self.drawers = [TikzNetworkDrawer(network, **kwds)]
+        self.save(filename, type=type, **kwds)
 
-    """
-
-    def __init__(self, network, **kwds):
-        """Initialize the Plot class.
+    def add(self, network, **kwds):
+        """Add a new network to the canvas.
 
         Parameters
         ----------
@@ -597,10 +576,99 @@ class Plot(object):
 
         kwds : keyword arguments, optional (default= no attributes)
             Attributes to add to the drawer as key=value pairs.
-            See also :py:meth:`plot`
+            See also :py:class:`Plot`
+
+        See Also
+        --------
+        Plot
 
         """
-        self.drawer = TikzNetworkDrawer(network, **kwds)
+        self.drawers.append(TikzNetworkDrawer(network, **kwds))
+
+    def save(self, filename, type=None, **kwds):
+        """Saves the network.
+
+        Parameters
+        ----------
+        filename : file, string or None, optional (default = None)
+            File or filename to save. The file ending specifies the
+            output. i.e. is the file ending with '.tex' a tex file will be
+            created; if the file ends with '.pdf' a pdf is created; if the file
+            ends with '.csv', two csv files are generated (filename_nodes.csv
+            and filename_edges.csv). If the filename is a tuple of strings, the
+            first entry will be used to name the node list and the second entry
+            for the edge list; and if no ending and no type is defined a
+            temporary pdf file is compiled and shown.
+
+        type : str or None, optional (default = None)
+            Type of the output file. If no ending is defined trough the filename,
+            the type of the output file can be specified by the type
+            option. Currently the following output types are supported:
+            'tex', 'pdf', 'csv' and 'dat'.
+
+        kwds : keyword arguments, optional (default= no attributes)
+            Attributes used to modify the appearance of the plot.
+            For details see below.
+
+        **LaTeX compiler options:**
+
+        - ``clean`` : bool, optional (default = True)
+          Whether non-pdf files created that are created during compilation should
+          be removed.
+
+        - ``clean_tex`` : bool, optional (default = True)
+          Also remove the generated tex file.
+
+        - ``compiler`` : `str` or `None`, optional (default = None)
+          The name of the LaTeX compiler to use. If it is None, cnet will choose a
+          fitting one on its own. Starting with ``latexmk`` and then ``pdflatex``.
+
+        - ``compiler_args`` : `list` or `None`, optional (default = None)
+          Extra arguments that should be passed to the LaTeX compiler. If this is
+          None it defaults to an empty list.
+
+        - ``silent`` : bool, optional (default = True)
+          Whether to hide compiler output or not.
+
+        """
+        if filename is None:
+            filename = self.filename
+        # get properties for the latex compiler
+        _clean = kwds.get('clean', True)
+        _clean_tex = kwds.get('clean_tex', True)
+        _compiler = kwds.get('compiler', None)
+        _compiler_args = kwds.get('compiler_arg', None)
+        _silent = kwds.get('silent', True)
+
+        if isinstance(filename, tuple) or isinstance(filename, list) or \
+                filename.endswith('.csv') or type == 'csv' or \
+                filename.endswith('.dat') or type == 'dat':
+            # log.debug('Create csv files')
+            self.save_csv(filename)
+        elif filename == 'default_network' and type is None:
+            # log.debug('Show the network')
+            # get current directory
+            current_dir = os.getcwd()
+            # create temp file name
+            temp_filename = os.path.join(current_dir, filename)
+            # save a pdf file
+            self.save_pdf(filename, clean=_clean, clean_tex=_clean_tex,
+                          compiler=_compiler, compiler_args=_compiler_args,
+                          silent=_silent)
+            # open the file
+            webbrowser.open(r'file:///'+temp_filename+'.pdf')
+            # self.show(filename)
+        elif filename.endswith('.tex') or type == 'tex':
+            # log.debug('Create tex file')
+            standalone = kwds.get('standalone', True)
+            self.save_tex(filename, standalone=standalone)
+        elif filename.endswith('.pdf') or type == 'pdf':
+            # log.debug('Create pdf plot')
+            self.save_pdf(filename, clean=_clean, clean_tex=_clean_tex,
+                          compiler=_compiler, compiler_args=_compiler_args,
+                          silent=_silent)
+        else:
+            log.warn('No valid output option was chosen!')
 
     def save_tex(self, filename, standalone=True):
         """Save the network as a tex file.
@@ -615,7 +683,7 @@ class Plot(object):
            If this option is true, a standalone latex file will be
            created. i.e. the figure can be compiled from this output file. If
            standalone is false, only the tikz environment is stored in the tex
-           file, and can be imported in an existing tex file. 
+           file, and can be imported in an existing tex file.
 
         """
         latex_header = '\\documentclass{standalone}\n' + \
@@ -624,10 +692,14 @@ class Plot(object):
         latex_begin_tikz = '\\begin{tikzpicture}\n'
         latex_end_tikz = '\\end{tikzpicture}\n'
         latex_footer = '\\end{document}'
-
+        latex_begin_scope = '\\begin{scope}'
+        latex_end_scope = '\\end{scope}\n'
         # margins = self.drawer.margins
-        w = self.drawer.canvas.width
-        h = self.drawer.canvas.height
+        # w = self.drawer.canvas.width
+        # h = self.drawer.canvas.height
+        w = max([drawer.canvas.width for drawer in self.drawers])
+        h = max([drawer.canvas.height for drawer in self.drawers])
+
         latex_canvas = '\\clip (0,0) rectangle ({},{});\n'.format(w, h)
 
         # latex_margins = '\\fill[orange!20] ({},{}) rectangle ({},{});\n'\
@@ -642,10 +714,19 @@ class Plot(object):
             f.write(latex_canvas)
             # f.write(latex_margins)
 
-            for node in self.drawer.node_drawer:
-                f.write(node.draw())
-            for edge in self.drawer.edge_drawer:
-                f.write(edge.draw())
+            for drawer in self.drawers:
+                # TODO: Find a better implementation for the x and y shifts
+                if len(self.drawers) > 1:
+                    _x = drawer.general_attributes.get('xshift', '0cm')
+                    _y = drawer.general_attributes.get('yshift', '0cm')
+                    f.write(latex_begin_scope +
+                            '[xshift={},yshift={}]\n'.format(_x, _y))
+                for node in drawer.node_drawer:
+                    f.write(node.draw())
+                for edge in drawer.edge_drawer:
+                    f.write(edge.draw())
+                if len(self.drawers) > 1:
+                    f.write(latex_end_scope)
 
             f.write(latex_end_tikz)
             if standalone:
@@ -798,16 +879,11 @@ class Plot(object):
         # change back to current dir
         os.chdir(current_dir)
 
-    def show(self, filename):
+    def show(self):
         """Show the compiled network.
 
         Create a tex file and compile the pdf out of it. After this is done the
         pdf will be automatically opened.
-
-        Parameters
-        ----------
-        filename : file or string
-            File or filename to save.
 
         See Also
         --------
@@ -817,7 +893,7 @@ class Plot(object):
         # get current directory
         current_dir = os.getcwd()
         # create temp file name
-        temp_filename = os.path.join(current_dir, filename)
+        temp_filename = os.path.join(current_dir, self.filename)
         # save a pdf file
         self.save_pdf(temp_filename)
         # open the file

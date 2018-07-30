@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : __init__.py
 # Creation  : 21 May 2018
-# Time-stamp: <Son 2018-07-29 15:05 juergen>
+# Time-stamp: <Mon 2018-07-30 15:41 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -49,8 +49,9 @@ def logger(name, level='INFO'):
     return logger
 
 
-from .plot import plot
+from .plot import Plot
 from .layout import layout
+plot = Plot()
 
 # =============================================================================
 # eof

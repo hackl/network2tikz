@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : drawing.py
 # Creation  : 08 May 2018
-# Time-stamp: <Son 2018-07-29 15:59 juergen>
+# Time-stamp: <Mon 2018-07-30 15:52 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -370,6 +370,11 @@ class TikzNetworkDrawer(object):
                          'bottom': self.unit2cm(_margins.get('bottom', 0)),
                          'right': self.unit2cm(_margins.get('right', 0))}
             self.general_attributes['margins'] = value
+
+        for key in ['xshift', 'yshift']:
+            if key in self.general_attributes:
+                v = self.general_attributes[key]
+                self.general_attributes[key] = str(self.unit2cm(v))+'cm'
 
     def format_node_value(self, value):
         """Returns a dict with node ids and assigned values."""

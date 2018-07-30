@@ -1,12 +1,13 @@
 # network2tikz
 
-| Module:  | network2tikz |
-|----------|--------------|
-| Date:    | 29 July 2018  |
-| Authors: | Jürgen Hackl |
+| Module:  | network2tikz                            |
+|----------|-----------------------------------------|
+| Date:    | 30 July 2018                            |
+| Authors: | Jürgen Hackl                            |
 | Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
-| License: | GNU GPLv3    |
-| Version: | 0.1.4        |
+| License: | GNU GPLv3                               |
+| Version: | 0.1.5                                   |
+|          |                                         |
 
 This is `network2tikz`, a Python tool for converting network
 visualizations into [TikZ](https://www.ctan.org/pkg/pgf)
@@ -629,12 +630,11 @@ used in the remaining code. This allows to keep the keywords used in
 - [ ] Add multi-layer handler
 
 ## Changelog
-| Version | Date       | Changes                                        |
-|---------|------------|------------------------------------------------|
-| 0.1.0   | 2018-05-21 | initial commit to github                       |
-| 0.1.1   | 2018-05-22 | initial commit to PyPI                         |
-| 0.1.2   | 2018-05-27 | fixed Windows compiling problem                |
-| 0.1.3   | 2018-07-17 | fixed layout problem when coordinates are zero |
-| 0.1.4   | 2018-07-29 | added some layouts algorithms                  |
-
-
+| Version | Date       | Changes                                         |
+|---------|------------|-------------------------------------------------|
+| 0.1.0   | 2018-05-21 | initial commit to github                        |
+| 0.1.1   | 2018-05-22 | initial commit to PyPI                          |
+| 0.1.2   | 2018-05-27 | fixed Windows compiling problem                 |
+| 0.1.3   | 2018-07-17 | fixed layout problem when coordinates are zero  |
+| 0.1.4   | 2018-07-29 | added some layouts algorithms                   |
+| 0.1.5   | 2018-07-30 | allow to add multiple networks to the same plot |
