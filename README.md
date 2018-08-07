@@ -2,11 +2,11 @@
 
 | Module:  | network2tikz                            |
 |----------|-----------------------------------------|
-| Date:    | 30 July 2018                            |
+| Date:    | 07 August 2018                            |
 | Authors: | Jürgen Hackl                            |
 | Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
 | License: | GNU GPLv3                               |
-| Version: | 0.1.5                                   |
+| Version: | 0.1.6                                   |
 |          |                                         |
 
 This is `network2tikz`, a Python tool for converting network
@@ -638,3 +638,5 @@ used in the remaining code. This allows to keep the keywords used in
 | 0.1.3   | 2018-07-17 | fixed layout problem when coordinates are zero  |
 | 0.1.4   | 2018-07-29 | added some layouts algorithms                   |
 | 0.1.5   | 2018-07-30 | allow to add multiple networks to the same plot |
+| 0.1.6   | 2018-08-07 | some smaller bug fixes                          |
+|         |            |                                                 |
