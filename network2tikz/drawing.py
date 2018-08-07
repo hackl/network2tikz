@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : drawing.py
 # Creation  : 08 May 2018
-# Time-stamp: <Mon 2018-07-30 15:52 juergen>
+# Time-stamp: <Die 2018-08-07 10:40 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -117,7 +117,8 @@ class TikzNetworkDrawer(object):
             self.directed = network.is_directed()
             if _layout:
                 import networkx as nx
-                adjacency_matrix = nx.adjacency_matrix(network, weight=_weight)
+                self.adjacency_matrix = nx.adjacency_matrix(
+                    network, weight=_weight)
 
         elif 'igraph' in str(type(network)):
             # log.debug('The network is of type "igraph".')
@@ -128,7 +129,7 @@ class TikzNetworkDrawer(object):
             if _layout:
                 from scipy.sparse import coo_matrix
                 A = np.array(network.get_adjacency(attribute=_weight).data)
-                adjacency_matrix = coo_matrix(A)
+                self.adjacency_matrix = coo_matrix(A)
 
         elif 'pathpy' in str(type(network)):
             # log.debug('The network is of type "pathpy".')
@@ -141,7 +142,7 @@ class TikzNetworkDrawer(object):
                     _w = True
                 else:
                     _w = False
-            adjacency_matrix = network.adjacency_matrix(weighted=_w)
+            self.adjacency_matrix = network.adjacency_matrix(weighted=_w)
 
         elif isinstance(network, tuple):
             # log.debug('The network is of type "list".')
