@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : drawing.py
 # Creation  : 08 May 2018
-# Time-stamp: <Die 2018-08-07 10:40 juergen>
+# Time-stamp: <Mon 2018-11-05 10:23 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -142,7 +142,7 @@ class TikzNetworkDrawer(object):
                     _w = True
                 else:
                     _w = False
-            self.adjacency_matrix = network.adjacency_matrix(weighted=_w)
+                self.adjacency_matrix = network.adjacency_matrix(weighted=_w)
 
         elif isinstance(network, tuple):
             # log.debug('The network is of type "list".')

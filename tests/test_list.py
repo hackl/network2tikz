@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_list.py
 # Creation  : 21 May 2018
-# Time-stamp: <Don 2018-07-26 16:08 juergen>
+# Time-stamp: <Mon 2018-11-05 10:42 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -163,13 +163,13 @@ def test_plot_all_options(net, layout, color_dict, shape_dict, style_dict):
     visual_style["canvas"] = (100, 60)
     visual_style['keep_aspect_ratio'] = False
 
-    # plot(net,'network.tex',**visual_style)
+    plot(net, 'network.tex', **visual_style)
 
-    # plot(net,'network.csv',**visual_style)
+    plot(net, 'network.csv', **visual_style)
 
-    # plot(net,'network.pdf',**visual_style)
+    plot(net, 'network.pdf', **visual_style)
 
-    # plot(net,**visual_style)
+    plot(net, **visual_style)
 # =============================================================================
 # eof
 #

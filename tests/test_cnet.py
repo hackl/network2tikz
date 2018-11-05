@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : test_cnet.py
 # Creation  : 21 May 2018
-# Time-stamp: <Son 2018-07-29 15:48 juergen>
+# Time-stamp: <Mon 2018-11-05 10:38 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -87,7 +87,7 @@ def test_plot(net, _layout, color_dict):
     # plot(net, layout=layout, canvas=(8,8), margin=1) # plot_03.png
 
     visual_style = {}
-    visual_style['layout'] = layout
+    visual_style['layout'] = _layout
     visual_style['node_size'] = .5
     visual_style['node_color'] = [color_dict[g] for g in net.nodes('gender')]
     visual_style['node_opacity'] = .7
@@ -156,7 +156,7 @@ def test_plot_all_options(net, _layout, color_dict, shape_dict, style_dict):
     # general options
     # ---------------
     visual_style['unit'] = 'mm'
-    visual_style['layout'] = layout
+    visual_style['layout'] = _layout
     visual_style["margin"] = {'top': 5, 'bottom': 8, 'left': 5, 'right': 5}
     visual_style["canvas"] = (100, 60)
     visual_style['keep_aspect_ratio'] = False

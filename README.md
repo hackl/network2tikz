@@ -2,11 +2,11 @@
 
 | Module:  | network2tikz                            |
 |----------|-----------------------------------------|
-| Date:    | 07 August 2018                            |
+| Date:    | 05 November 2018                            |
 | Authors: | Jürgen Hackl                            |
 | Contact: | [hackl.j@gmx.at](mailto:hackl.j@gmx.at) |
 | License: | GNU GPLv3                               |
-| Version: | 0.1.6                                   |
+| Version: | 0.1.7                                   |
 |          |                                         |
 
 This is `network2tikz`, a Python tool for converting network
@@ -639,4 +639,5 @@ used in the remaining code. This allows to keep the keywords used in
 | 0.1.4   | 2018-07-29 | added some layouts algorithms                   |
 | 0.1.5   | 2018-07-30 | allow to add multiple networks to the same plot |
 | 0.1.6   | 2018-08-07 | some smaller bug fixes                          |
+| 0.1.7   | 2018-11-05 | fixed error with pathpy and csv export          |
 |         |            |                                                 |

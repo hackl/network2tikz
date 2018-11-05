@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : plot.py
 # Creation  : 08 May 2018
-# Time-stamp: <Mon 2018-07-30 16:05 juergen>
+# Time-stamp: <Mon 2018-11-05 10:35 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -761,15 +761,17 @@ class Plot(object):
 
         # write node list
         with open(basename_n+'.csv', 'w') as f:
-            f.write(self.drawer.node_drawer[0].head())
-            for node in self.drawer.node_drawer:
-                f.write(node.draw(mode='csv'))
+            f.write(self.drawers[0].node_drawer[0].head())
+            for drawer in self.drawers:
+                for node in drawer.node_drawer:
+                    f.write(node.draw(mode='csv'))
 
         # write edge list
         with open(basename_e+'.csv', 'w') as f:
-            f.write(self.drawer.edge_drawer[0].head())
-            for edge in self.drawer.edge_drawer:
-                f.write(edge.draw(mode='csv'))
+            f.write(self.drawers[0].edge_drawer[0].head())
+            for drawer in self.drawers:
+                for edge in drawer.edge_drawer:
+                    f.write(edge.draw(mode='csv'))
 
     def save_pdf(self, filename, clean=True, clean_tex=True,
                  compiler=None, compiler_args=None, silent=True):
