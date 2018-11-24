@@ -3,7 +3,7 @@
 # =============================================================================
 # File      : ex_animation.py
 # Creation  : 24 November 2018
-# Time-stamp: <Sam 2018-11-24 08:46 juergen>
+# Time-stamp: <Sam 2018-11-24 09:10 juergen>
 #
 # Copyright (c) 2018 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
 #               http://www.ibi.ethz.ch
@@ -29,8 +29,8 @@ import os
 import sys
 import numpy as np
 
-sys.path.insert(0, os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.insert(0, os.path.abspath(
+#    os.path.join(os.path.dirname(__file__), '..')))
 
 from network2tikz import plot
 
