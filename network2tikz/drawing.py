@@ -534,9 +534,12 @@ class TikzEdgeDrawer(object):
     def _check_color(self, mode='tex'):
         """Check if RGB colors are used and return this option."""
         _color = self.attributes.get('edge_color', None)
+        _label_color = self.attributes.get('edge_label_color', None)
         if isinstance(_color, tuple) and mode == 'tex':
             self.attributes['edge_color'] = '{{{},{},{}}}'.format(
                 _color[0], _color[1], _color[2])
+            self.attributes['edge_label_color'] = '{{{},{},{}}}'.format(
+                _label_color[0], _label_color[1], _label_color[2])
             self.attributes['edge_rgb'] = True
         elif isinstance(_color, tuple) and mode == 'csv' and \
                 self.attributes.get('edge_rgb', False):
@@ -719,9 +722,12 @@ class TikzNodeDrawer(object):
     def _check_color(self, mode='tex'):
         """Check if RGB colors are used and return this option."""
         _color = self.attributes.get('node_color', None)
+        _label_color = self.attributes.get('node_label_color', None)
         if isinstance(_color, tuple) and mode == 'tex':
             self.attributes['node_color'] = '{{{},{},{}}}'.format(
                 _color[0], _color[1], _color[2])
+            self.attributes['node_label_color'] = '{{{},{},{}}}'.format(
+                _label_color[0], _label_color[1], _label_color[2])
             self.attributes['node_rgb'] = True
         elif isinstance(_color, tuple) and mode == 'csv' and \
                 self.attributes.get('node_rgb', False):
