@@ -539,11 +539,9 @@ class TikzEdgeDrawer(object):
             self.attributes['edge_color'] = '{{{},{},{}}}'.format(
                 _color[0], _color[1], _color[2])
             if isinstance(_label_color, tuple):
-                print("FOUND RGB EDGE LABELS!!!!!")
                 self.attributes['edge_label_color'] = '{{{},{},{}}}'.format(
                 _label_color[0], _label_color[1], _label_color[2])  
             else:
-                print("HEY MABEL BLACK EDGE LABELS!!!!!")
                 self.attributes['edge_label_color'] = '{0,0,0}'    
             self.attributes['edge_rgb'] = True
         elif isinstance(_color, tuple) and mode == 'csv' and \
