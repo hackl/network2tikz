@@ -536,46 +536,51 @@ class TikzEdgeDrawer(object):
         _color = self.attributes.get('edge_color', None)
         _label_color = self.attributes.get('edge_label_color', None)
 
-        if isinstance(_color,tuple) and isinstance(_label_color,tuple):
+        # logic to ensure compatible colour directives
+        if _color is None and _label_color is None:
+            # print("NOTE: using TIKZ default (edge) and (edge label) colours.")
             pass
-        elif isinstance(_color,tuple) and not isinstance(_label_color,tuple):
-            print("WARNING: setting edge label colour to {0,0,0}.")
-            _label_color = (0,0,0)
-
-        elif not isinstance(_color,tuple) and isinstance(_label_color,tuple):
-            print("WARNING: setting edge label colour to black.")
-            self.attributes['edge_label_color'] = 'black'
-
-        if isinstance(_color, tuple) and mode == 'tex':
-            self.attributes['edge_color'] = '{{{},{},{}}}'.format(
-                _color[0], _color[1], _color[2])
+        elif _color is None and isinstance(_label_color,tuple):
+            # print("NOTE: using TIKZ default (edge) and RGB (edge label) colours.")
             self.attributes['edge_label_color'] = '{{{},{},{}}}'.format(
             _label_color[0], _label_color[1], _label_color[2])  
             self.attributes['edge_rgb'] = True
-        elif isinstance(_color, tuple) and mode == 'csv' and \
-                self.attributes.get('edge_rgb', False):
-            self.attributes['edge_color'] = None
-            self.attributes['edge_r'] = _color[0]
-            self.attributes['edge_g'] = _color[1]
-            self.attributes['edge_b'] = _color[2]
-        elif not isinstance(_color, tuple) and mode == 'csv' and \
-                self.attributes.get('edge_rgb', False):
-            self.attributes['edge_r'] = self.attributes.get('edge_r', 0)
-            self.attributes['edge_g'] = self.attributes.get('edge_g', 0)
-            self.attributes['edge_b'] = self.attributes.get('edge_b', 0)
-        elif isinstance(_color, tuple) and mode == 'csv' and \
-                self.attributes.get('edge_rgb', False) == False:
-            self.attributes['edge_color'] = None
+        elif not isinstance(_color,tuple) and isinstance(_label_color,tuple):
+            # print("NOTE: setting edge label colour to black.")
+            self.attributes['edge_label_color'] = 'black'
+            # the following line would set the labels to match the edge colour, but that might not be desirable
+            # self.attributes['edge_label_color'] = None
+        elif isinstance(_color,tuple) and not isinstance(_label_color,tuple):
+            # print("NOTE: setting edge label colour to RGB tuple (0,0,0).")
+            _label_color = (0,0,0)
+        elif isinstance(_color,tuple) and isinstance(_label_color,tuple):
+            # print("NOTE: using RGB for (edge) and (edge label) colours.")
+            pass
 
-# # edge label colours can be independent of node colours
-# TODO: think about this - default edge colour in tikz?
-#         if isinstance(_label_color, tuple) and mode == 'tex':
-#             self.attributes['edge_label_color'] = '{{{},{},{}}}'.format(
-#             _label_color[0], _label_color[1], _label_color[2])  
-#             self.attributes['edge_rgb'] = True
-#         else:
-#             self.attributes['edge_label_color'] = '{0,0,0}'    
-#             self.attributes['edge_rgb'] = True
+        if isinstance(_color, tuple):
+            # edges
+            self.attributes['edge_color'] = '{{{},{},{}}}'.format(
+                _color[0], _color[1], _color[2])
+            # labels
+            self.attributes['edge_label_color'] = '{{{},{},{}}}'.format(
+            _label_color[0], _label_color[1], _label_color[2])  
+
+            self.attributes['edge_rgb'] = True
+
+
+        if mode == 'csv' and self.attributes.get('edge_rgb', False):
+            if isinstance(_color, tuple):
+                self.attributes['edge_color'] = None
+                self.attributes['edge_r'] = _color[0]
+                self.attributes['edge_g'] = _color[1]
+                self.attributes['edge_b'] = _color[2]
+            elif not isinstance(_color, tuple):
+                self.attributes['edge_r'] = self.attributes.get('edge_r', 0)
+                self.attributes['edge_g'] = self.attributes.get('edge_g', 0)
+                self.attributes['edge_b'] = self.attributes.get('edge_b', 0)
+            elif isinstance(_color, tuple) and self.attributes.get('edge_rgb', False) == False:
+                self.attributes['edge_color'] = None
+
 
     def _format_style(self):
         """Format the style attribute for the edge.
@@ -744,45 +749,50 @@ class TikzNodeDrawer(object):
         """Check if RGB colors are used and return this option."""
         _color = self.attributes.get('node_color', None)
         _label_color = self.attributes.get('node_label_color', None)
-        # print(_color, _label_color)
-        if isinstance(_color,tuple) and isinstance(_label_color,tuple):
+
+        # logic to ensure compatible colour directives
+        if _color is None and _label_color is None:
             pass
-        elif isinstance(_color,tuple) and not isinstance(_label_color,tuple):
-            print("WARNING: setting node label colour to {0,0,0}.")
-            _label_color = (0,0,0)
-
+        elif _color is None and isinstance(_label_color,tuple):
+            # print("NOTE: using TIKZ default (edge) and RGB (edge label) colours.")
+            self.attributes['node_label_color'] = '{{{},{},{}}}'.format(
+            _label_color[0], _label_color[1], _label_color[2])  
+            self.attributes['node_rgb'] = True
         elif not isinstance(_color,tuple) and isinstance(_label_color,tuple):
-            print("WARNING: setting node label colour to black.")
+            # print("NOTE: setting node label colour to black.")
             self.attributes['node_label_color'] = 'black'
+        elif isinstance(_color,tuple) and not isinstance(_label_color,tuple):
+            # print("NOTE: setting node label colour to tuple (0,0,0).")
+            _label_color = (0,0,0)
+        elif isinstance(_color,tuple) and isinstance(_label_color,tuple):
+            pass
 
-        # else:
-        #     print("WARNING: Node labels and node colours must be of the same type (RGB/RGB or name/name).")
-        
-        if isinstance(_color, tuple) and mode == 'tex':
+
+        if isinstance(_color, tuple):
+            # nodes
             self.attributes['node_color'] = '{{{},{},{}}}'.format(
                 _color[0], _color[1], _color[2])
-            # if isinstance(_label_color, tuple):
+            # node labels
             self.attributes['node_label_color'] = '{{{},{},{}}}'.format(
             _label_color[0], _label_color[1], _label_color[2])    
-            # else:
-            #     print("WARNING: setting node label colour to {0,0,0}.")
-            #     self.attributes['node_label_color'] = '{0,0,0}'
-
             self.attributes['node_rgb'] = True
-        elif isinstance(_color, tuple) and mode == 'csv' and \
-                self.attributes.get('node_rgb', False):
-            self.attributes['node_color'] = None
-            self.attributes['node_r'] = _color[0]
-            self.attributes['node_g'] = _color[1]
-            self.attributes['node_b'] = _color[2]
-        elif not isinstance(_color, tuple) and mode == 'csv' and \
-                self.attributes.get('node_rgb', False):
-            self.attributes['node_r'] = self.attributes.get('node_r', 0)
-            self.attributes['node_g'] = self.attributes.get('node_g', 0)
-            self.attributes['node_b'] = self.attributes.get('node_b', 0)
-        elif isinstance(_color, tuple) and mode == 'csv' and \
-                self.attributes.get('node_rgb', False) == False:
-            self.attributes['node_color'] = None
+
+        # csv export
+        if mode == 'csv':
+            if isinstance(_color, tuple) and \
+                    self.attributes.get('node_rgb', False):
+                self.attributes['node_color'] = None
+                self.attributes['node_r'] = _color[0]
+                self.attributes['node_g'] = _color[1]
+                self.attributes['node_b'] = _color[2]
+            elif not isinstance(_color, tuple) and \
+                    self.attributes.get('node_rgb', False):
+                self.attributes['node_r'] = self.attributes.get('node_r', 0)
+                self.attributes['node_g'] = self.attributes.get('node_g', 0)
+                self.attributes['node_b'] = self.attributes.get('node_b', 0)
+            elif isinstance(_color, tuple) and \
+                    self.attributes.get('node_rgb', False) == False:
+                self.attributes['node_color'] = None
 
     def draw(self, mode='tex'):
         """Function to draw a virtual node.
