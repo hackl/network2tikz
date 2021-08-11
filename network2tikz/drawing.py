@@ -754,7 +754,7 @@ class TikzNodeDrawer(object):
         if _color is None and _label_color is None:
             pass
         elif _color is None and isinstance(_label_color,tuple):
-            # print("NOTE: using TIKZ default (edge) and RGB (edge label) colours.")
+            # print("NOTE: using TIKZ default (node) and RGB (node label) colours.")
             self.attributes['node_label_color'] = '{{{},{},{}}}'.format(
             _label_color[0], _label_color[1], _label_color[2])  
             self.attributes['node_rgb'] = True
